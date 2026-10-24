@@ -1,0 +1,109 @@
+# =====================================================================
+#  SINTONIZZATI · le carte gratuite
+# =====================================================================
+#  Questo file contiene SOLO le carte della versione gratuita:
+#  le prime 30 carte di Radio Merenda, Hit Parade e Onde Cerebrali.
+#  Tutte le altre carte stanno sul server (Cloudflare) e arrivano
+#  all'app solo dopo un acquisto verificato.
+#  NON incollare qui il file completo: sarebbe leggibile da chiunque.
+# =====================================================================
+
+
+[Radio Merenda]
+# Per i più piccoli: parole semplici e cose di tutti i giorni
+Piccolo | Grande
+Lento | Veloce
+Silenzioso | Rumoroso
+Freddo | Caldo
+Morbido | Duro
+Facile | Difficile
+Leggero | Pesante
+Sporco | Pulito
+Noioso | Divertente
+Triste | Allegro
+Brutto | Bello
+Cattivo | Buono
+Corto | Lungo
+Basso | Alto
+Vuoto | Pieno
+Vecchio | Nuovo
+Debole | Forte
+Calmo | Agitato
+Timido | Coraggioso
+Disordinato | Ordinato
+Liscio | Ruvido
+Bagnato | Asciutto
+Dolce | Salato
+Puzza | Profuma
+Comune | Raro
+Inutile | Utile
+Fragile | Indistruttibile
+Colore scuro | Colore chiaro
+Colori spenti | Colori sgargianti
+Spaventoso | Coccoloso
+
+[Hit Parade]
+# Per tutti
+Freddo | Caldo
+Sottovalutato | Sopravvalutato
+Inutile | Utile
+Facile da disegnare | Difficile da disegnare
+Noiosissimo | Entusiasmante
+Cibo da colazione | Cibo da cena
+Animale debole | Animale forte
+Film per bambini | Film per adulti
+Comune | Raro
+Brutto | Bello
+Puzza | Profuma
+Hobby da nonni | Hobby da ragazzi
+Economico | Costoso
+Stressante | Rilassante
+Antico | Moderno
+Minuscolo | Enorme
+Dolce | Salato
+Lento | Veloce
+Silenzioso | Rumoroso
+Da fare in estate | Da fare in inverno
+Morbido | Duro
+Leggero | Pesante
+Da città | Da campagna
+Pigrissimo | Iperattivo
+Prevedibile | Sorprendente
+Snob | Alla mano
+Fa male | Fa bene
+Triste | Allegro
+Inquietante | Rassicurante
+Superpotere discreto | Superpotere appariscente
+
+[Onde Cerebrali]
+# Concetti astratti e sfumati
+Immorale | Etico
+Non considerato arte | Considerato arte
+Scoperto | Inventato
+Naturale | Artificiale
+Irrazionale | Razionale
+Destino | Caso
+Caos | Ordine
+Distopia | Utopia
+Di massa | Di nicchia
+Concreto | Astratto
+Oggettivo | Soggettivo
+Semplice | Complesso
+Interesse personale | Bene comune
+Libertà | Sicurezza
+Tradizione | Progresso
+Corpo | Mente
+Emozione | Ragione
+Individuo | Collettività
+Effimero | Eterno
+Reale | Immaginario
+Bugia comoda | Verità scomoda
+Sacro | Profano
+Genialità | Follia
+Incoscienza | Coraggio
+Codardia | Prudenza
+Ambizione tossica | Ambizione sana
+Vendetta | Giustizia
+Imperdonabile | Perdonabile
+Privilegio per pochi | Diritto per tutti
+Capriccio | Bisogno
