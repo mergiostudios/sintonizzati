@@ -4989,7 +4989,7 @@ Capriccio | Bisogno
     squadre: { titolo: 'A squadre', passi: [
       '<b>La squadra di turno sceglie un caposquadra</b>, diverso ogni volta. Solo lui guarda lo schermo: vede in basso la carta parola (es. brutto/bello) e sopra la scala della radio con un bersaglio. Può cambiare carta due volte.',
       '<b>Il caposquadra dice un indizio ad alta voce</b>: la sua squadra ne discute, posiziona la lancetta e la conferma.',
-      '<b>L’altra squadra scommette</b> su quanto è lontana la lancetta dalla frequenza segreta: <b>Segnale perfetto</b> (è sul 5 o sul 4, errore fino al 2%: +2), <b>Segnale disturbato</b> (errore tra il 2% e il 7%: +1) o <b>Fuori frequenza</b> (errore oltre il 7%: +3).',
+      '<b>L’altra squadra scommette</b> su quanto è lontana la lancetta dalla frequenza segreta: <b>Segnale perfetto</b> (è sul 5 o sul 4, errore fino al 2,5%: +2), <b>Segnale disturbato</b> (errore tra il 2,5% e il 9%: +1) o <b>Fuori frequenza</b> (errore oltre il 9%: +3).',
       '<b>Si rivela il bersaglio.</b> La squadra di turno prende da 0 a 5 punti; l’altra prende i punti della scommessa, se l’ha indovinata.',
       '<b>Tre turni a testa</b>, alternati: alla fine vince la squadra con più punti.',
       '<b>Se siete pari</b> si gioca uno spareggio, un turno a testa con le stesse regole. Se la parità resta, è pareggio.'
@@ -6168,9 +6168,10 @@ Capriccio | Bisogno
      - Standard: quello di tutte le modalità.
      - Sintonia fine e Ricezione amplificata: SOLO nella modalità collaborativa. */
   const BERSAGLI = {
-    standard:    { nome: 'Standard',              larghezze: [1.5, 2.5, 3.5, 5, 7.5] },          // 20%: 5-4-3-2-1
-    fine:        { nome: 'Sintonia fine',         larghezze: [0.8, 2.2, 3, 3.5, 4, 3.17] },      // 16,67%: 6-5-4-3-2-1
-    amplificata: { nome: 'Ricezione amplificata', larghezze: [1.5, 2.5, 4, 6, 11] }              // 25%: 5-4-3-2-1
+    // larghezza totale di ogni fascia (le due metà insieme), dal centro verso l'esterno
+    standard:    { nome: 'Standard',              larghezze: [1.875, 3.125, 4.375, 6.25, 9.375] },  // 25% (1/4): 5-4-3-2-1, fasce basse più larghe
+    fine:        { nome: 'Sintonia fine',         larghezze: [0.8, 2.4, 3.2, 3.8, 4.4, 5.4] },      // 20% (1/5): 6-5-4-3-2-1, il 6 resta stretto
+    amplificata: { nome: 'Ricezione amplificata', larghezze: [3.6, 6.4, 5.6, 5.2, 5.87] }           // 26,67% (1/3,75): 5-4-3-2-1, il 4 e il 5 più facili
   };
   // fin dove arriva ogni fascia, misurato dal centro (metà della fascia centrale, poi una fascia per parte alla volta)
   Object.values(BERSAGLI).forEach(b => {
@@ -6178,7 +6179,8 @@ Capriccio | Bisogno
     b.mezze = b.larghezze.map((l, k) => (fino += k ? l / 2 : l / 2));
     b.massimo = b.larghezze.length;
   });
-  const MEZZE_FASCE = BERSAGLI.standard.mezze;          // 0,75 - 2 - 3,75 - 6,25 - 10
+  const MEZZE_FASCE = BERSAGLI.standard.mezze;          // 0,94 - 2,5 - 4,69 - 7,81 - 12,5
+  const LIMITE_DISTURBATO = 9;                          // scommesse a squadre: oltre il 9% di errore è "fuori frequenza"
   const LUCE_SEGNALE = { y: 22, alto: 164 };
   // il bersaglio del turno: la collaborativa può sceglierne uno diverso, tutte le altre modalità usano lo standard
   function tipoBersaglio() { return (partita && BERSAGLI[partita.bersaglio]) ? partita.bersaglio : 'standard'; }
@@ -6604,9 +6606,9 @@ Capriccio | Bisogno
   const TURNI_SQUADRA = 3;
   // le tre scommesse: distanza tra lancetta e centro, in punti della scala (2% = 2, 7% = 7)
   const SCOMMESSE = [
-    { id: 'perfetto', nome: 'Segnale perfetto', punti: 2, vinta: d => d <= MEZZE_FASCE[1] + 1e-9 },   // sul 5 o sul 4 (entro il 2%)
-    { id: 'disturbato', nome: 'Segnale disturbato', punti: 1, vinta: d => d > 2 + 1e-9 && d <= 7 + 1e-9 },
-    { id: 'fuori', nome: 'Fuori frequenza', punti: 3, vinta: d => d > 7 + 1e-9 }
+    { id: 'perfetto', nome: 'Segnale perfetto', punti: 2, vinta: d => d <= MEZZE_FASCE[1] + 1e-9 },   // sul 5 o sul 4 (entro il 2,5%)
+    { id: 'disturbato', nome: 'Segnale disturbato', punti: 1, vinta: d => d > MEZZE_FASCE[1] + 1e-9 && d <= LIMITE_DISTURBATO + 1e-9 },
+    { id: 'fuori', nome: 'Fuori frequenza', punti: 3, vinta: d => d > LIMITE_DISTURBATO + 1e-9 }
   ];
   const scommessaDi = id => SCOMMESSE.find(x => x.id === id);
 
@@ -6669,15 +6671,15 @@ Capriccio | Bisogno
   }
 
   // La zona della scommessa si illumina sulla scala, attorno alla lancetta, nel colore della squadra che scommette:
-  // perfetto = entro 2 per parte (le fasce del 5 e del 4), disturbato = da 2 a 7 per parte, fuori = oltre 7 per parte
+  // perfetto = entro 2,5 per parte (le fasce del 5 e del 4), disturbato = da 2,5 a 9 per parte, fuori = oltre 9 per parte
   function disegnaScommessa() {
     latoScelto.replaceChildren();
     const p = partita;
     if (!p || p.modo !== 'squadre' || !p.scommessa) return;
     const v = p.sintonia, tratti = {
       perfetto: [[v - MEZZE_FASCE[1], v + MEZZE_FASCE[1]]],
-      disturbato: [[v - 7, v - 2], [v + 2, v + 7]],
-      fuori: [[-20, v - 7], [v + 7, 120]]
+      disturbato: [[v - LIMITE_DISTURBATO, v - MEZZE_FASCE[1]], [v + MEZZE_FASCE[1], v + LIMITE_DISTURBATO]],
+      fuori: [[-20, v - LIMITE_DISTURBATO], [v + LIMITE_DISTURBATO, 120]]
     }[p.scommessa];
     const g = svg('g', { class: 'zona-scommessa ' + lettera(altra(p.turno)) });
     tratti.forEach(([a, b]) => {
