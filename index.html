@@ -843,39 +843,101 @@
     margin: 0 calc(-1 * var(--padx)) -12px;
   }
   .scelta-radio[hidden] { display: none; }
-  .scelta-radio .sopra { margin: 0; font-size: clamp(15px, 4.4vh, 20px); font-size: clamp(15px, 4.4cqh, 20px); font-weight: 700; color: var(--inchiostro); text-wrap: balance; }
-  .scelta-opzioni { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px, 2vw, 16px); gap: clamp(8px, 2cqw, 16px); width: min(720px, 100%); }
+  /* il titolo: la radio ha appena agganciato il segnale pieno */
+  .scelta-radio .sopra { margin: 0; display: grid; gap: 2px; justify-items: center; }
+  .sopra-titolo { font: 400 clamp(15px, 4.6vh, 22px)/1.15 "Michroma", Verdana, sans-serif; font-size: clamp(15px, 4.6cqh, 22px); color: var(--ambra-testo); letter-spacing: .01em; text-shadow: 0 0 14px rgba(255, 181, 46, .45); animation: titolo-acceso 1.1s ease-out both; }
+  .sopra-sotto { font-size: clamp(14px, 4vh, 18px); font-size: clamp(14px, 4cqh, 18px); font-weight: 700; color: var(--inchiostro); animation: appari .5s ease-out .5s both; }
+  @keyframes titolo-acceso { 0% { opacity: 0; } 12% { opacity: 1; } 20% { opacity: .3; } 30%, 100% { opacity: 1; } }
+  .scelta-opzioni { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 2.4vw, 20px); gap: clamp(10px, 2.4cqw, 20px); width: min(640px, 100%); }
+  /* le due radio: un disegno grande e poche parole; quella scelta si accende e si anima */
   .opzione-radio {
     --luce: var(--segnale-alone);
-    position: relative; display: grid; align-content: start; gap: 4px; padding: clamp(8px, 2.4vh, 14px) 14px; padding: clamp(8px, 2.4cqh, 14px) 14px;
-    border-radius: 16px; border: 1.5px solid var(--bordo); background: var(--superficie); color: var(--inchiostro);
-    text-align: left; cursor: pointer; transition: box-shadow .25s, border-color .25s, transform .15s;
+    position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0;
+    padding: clamp(8px, 2.2vh, 12px) 12px clamp(9px, 2.4vh, 13px); padding: clamp(8px, 2.2cqh, 12px) 12px clamp(9px, 2.4cqh, 13px);
+    border-radius: 18px; border: 2px solid var(--bordo); background: var(--superficie); color: var(--inchiostro);
+    text-align: center; cursor: pointer; transition: border-color .25s, transform .15s;
   }
   .opzione-radio.fine { --luce: #1597BD; } .opzione-radio.amplificata { --luce: #6FA300; }
   :root[data-attivo="scuro"] .opzione-radio.fine { --luce: #38D3F2; } :root[data-attivo="scuro"] .opzione-radio.amplificata { --luce: #B4EE3A; }
   .opzione-radio:active { transform: scale(.98); }
-  .opzione-radio[aria-pressed="true"] {
-    border-color: var(--luce);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--luce) 45%, transparent), 0 0 22px 2px color-mix(in srgb, var(--luce) 55%, transparent);
+  .opzione-radio[aria-pressed="true"] { border-color: var(--luce); animation: bordo-radio 1.8s ease-in-out infinite; }
+  @keyframes bordo-radio {
+    0%, 100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--luce) 35%, transparent), 0 0 14px 1px color-mix(in srgb, var(--luce) 40%, transparent); }
+    50% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--luce) 55%, transparent), 0 0 30px 5px color-mix(in srgb, var(--luce) 60%, transparent); }
   }
-  .opzione-testa { display: flex; align-items: center; gap: 9px; }
-  .opzione-nome { font: 800 clamp(16px, 4.8vh, 21px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font-size: clamp(16px, 4.8cqh, 21px); }
-  /* un piccolo segnale luminoso: stretto per la sintonia fine, largo per la ricezione amplificata */
-  .opzione-segnale { flex: none; width: 26px; height: 22px; border-radius: 5px; background: var(--vetro); position: relative; overflow: hidden; box-shadow: inset 0 0 0 1.5px var(--corpo); }
-  .opzione-segnale::after { content: ""; position: absolute; top: 2px; bottom: 2px; left: 50%; width: 12px; transform: translateX(-50%);
-    background: linear-gradient(90deg, transparent, var(--luce, var(--segnale-alone)), transparent); }
-  .fine .opzione-segnale::after { width: 7px; }
-  .amplificata .opzione-segnale::after { width: 20px; }
-  .opzione-dati { font: 700 12px/1.2 "Bricolage Grotesque", system-ui, sans-serif; color: var(--tenue); letter-spacing: .02em; text-transform: uppercase; }
-  .opzione-descr { font-size: clamp(12.5px, 3.6vh, 14.5px); font-size: clamp(12.5px, 3.6cqh, 14.5px); line-height: 1.3; font-weight: 600; }
-  .opzione-dopo { font-size: clamp(11.5px, 3.3vh, 13px); font-size: clamp(11.5px, 3.3cqh, 13px); line-height: 1.3; color: var(--tenue); }
-  .opzione-attuale { position: absolute; top: 8px; right: 10px; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--luce) 20%, transparent); color: var(--inchiostro); }
+  .opzione-nome { font: 800 clamp(15px, 4.6vh, 20px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font-size: clamp(15px, 4.6cqh, 20px); }
+  .opzione-motto { font-size: clamp(12px, 3.5vh, 14.5px); font-size: clamp(12px, 3.5cqh, 14.5px); line-height: 1.25; font-weight: 600; color: var(--tenue); text-wrap: balance; }
+  .opzione-attuale { position: absolute; top: 8px; left: 10px; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--luce) 20%, transparent); color: var(--inchiostro); z-index: 1; }
+
+  /* ---- i disegni delle due radio ---- */
+  .ill { display: block; width: 100%; height: clamp(64px, 30vh, 140px); height: clamp(64px, 30cqh, 140px); overflow: visible; margin-bottom: 4px;
+    filter: saturate(.45); opacity: .7; transition: filter .35s, opacity .35s; }
+  .opzione-radio[aria-pressed="true"] .ill { filter: none; opacity: 1; }
+  .ill * { transform-box: view-box; }
+  .ill-corpo { fill: var(--corpo); }
+  .ill-vetro { fill: var(--vetro); }
+  .ill-maniglia { fill: none; stroke: var(--corpo); stroke-width: 6; }
+  .ill-tacche line { stroke: var(--vetro-segni); stroke-width: 1.1; opacity: .65; } .ill-tacche .ill-tl { stroke-width: 1.8; opacity: .95; }
+  .ill-antenna line, .ill-antenna-fissa { stroke: var(--corpo); stroke-width: 4; stroke-linecap: round; } .ill-punta { fill: var(--corpo); }
+  .ill-griglia rect { fill: var(--griglia); }
+  .ill-manopola circle { fill: var(--griglia); } .ill-manopola line { stroke: var(--vetro); stroke-width: 2.5; stroke-linecap: round; }
+  .ill-manopola { transform-origin: 44px 107px; }
+  .ill-ago line { stroke: var(--lancetta); stroke-width: 3; stroke-linecap: round; }
+  .ill-barre rect { fill: var(--griglia); transition: fill .3s; }
+  /* Sintonia fine: un segnale sottilissimo, la lente che lo cerca, la manopola che gira a scatti */
+  .ill-segnale-fine .ill-nucleo { fill: var(--luce); }
+  .ill-lente .vetro-lente-ill { fill: rgba(255, 255, 255, .22); stroke: #C9D3D4; stroke-width: 4.5; }
+  .ill-lente .manico-lente-ill { stroke: #C9D3D4; stroke-width: 7; stroke-linecap: round; }
+  .ill-fine .ill-ago, .ill-fine .ill-lente { transform: translateX(-46px); }
+  .ill-scintille path { fill: var(--luce); opacity: 0; }
+  .ill-scintille .ill-s1 { transform-origin: 128px 47px; } .ill-scintille .ill-s2 { transform-origin: 176px 57px; }
+  [aria-pressed="true"] .ill-fine .ill-ago, [aria-pressed="true"] .ill-fine .ill-lente { animation: cerca-fine 2s cubic-bezier(.3, .7, .3, 1) forwards; }
+  [aria-pressed="true"] .ill-fine .ill-manopola { animation: gira-manopola 2s cubic-bezier(.3, .7, .3, 1) forwards; }
+  [aria-pressed="true"] .ill-fine .ill-nucleo { animation: nucleo-fine 1.4s ease-in-out 1.9s infinite; }
+  [aria-pressed="true"] .ill-fine .ill-alone { animation: alone-fine 1.4s ease-in-out 1.9s infinite; }
+  [aria-pressed="true"] .ill-fine .ill-s1 { animation: scintilla-ill 1.6s ease-in-out 2s infinite; }
+  [aria-pressed="true"] .ill-fine .ill-s2 { animation: scintilla-ill 1.6s ease-in-out 2.5s infinite; }
+  @keyframes cerca-fine { 0% { transform: translateX(-46px); } 30% { transform: translateX(22px); } 50% { transform: translateX(-9px); } 66% { transform: translateX(4px); } 80% { transform: translateX(-1.5px); } 100% { transform: translateX(0); } }
+  @keyframes gira-manopola { 0% { transform: rotate(-120deg); } 30% { transform: rotate(60deg); } 50% { transform: rotate(-25deg); } 66% { transform: rotate(10deg); } 100% { transform: rotate(0); } }
+  @keyframes nucleo-fine { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+  @keyframes alone-fine { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+  @keyframes scintilla-ill { 0%, 100% { opacity: 0; transform: scale(.4) rotate(0); } 40% { opacity: 1; transform: scale(1.1) rotate(25deg); } 70% { opacity: 0; transform: scale(.6) rotate(45deg); } }
+  /* Ricezione amplificata: l'antenna si allunga, le onde partono, il segnale si allarga e respira */
+  .ill-antenna { transform-origin: 190px 40px; transform: scale(.55); }
+  .ill-onde path { fill: none; stroke: var(--luce); stroke-width: 3; stroke-linecap: round; opacity: 0; transform-origin: 206px 13px; }
+  .ill-segnale-ampio { transform-origin: 150px 69px; transform: scaleX(.3); }
+  [aria-pressed="true"] .ill-antenna { animation: antenna-su .7s cubic-bezier(.3, 1.5, .5, 1) forwards; }
+  [aria-pressed="true"] .ill-onde path { animation: onda-ill 1.8s ease-out .6s infinite; }
+  [aria-pressed="true"] .ill-onde .ill-o2 { animation-delay: .9s; } [aria-pressed="true"] .ill-onde .ill-o3 { animation-delay: 1.2s; }
+  [aria-pressed="true"] .ill-segnale-ampio { animation: segnale-largo 1s cubic-bezier(.3, 1.4, .5, 1) .5s forwards, respiro-ampio 2s ease-in-out 1.5s infinite; }
+  @keyframes antenna-su { from { transform: scale(.55); } to { transform: scale(1); } }
+  @keyframes onda-ill { 0% { opacity: 0; transform: scale(.5); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.25); } }
+  @keyframes segnale-largo { from { transform: scaleX(.3); } to { transform: scaleX(1); } }
+  @keyframes respiro-ampio { 0%, 100% { transform: scaleX(1); opacity: 1; } 50% { transform: scaleX(1.08); opacity: .8; } }
+  /* in tutte e due, le tacche del segnale si riempiono una alla volta */
+  [aria-pressed="true"] .ill-barre rect { animation: barra-ill .25s ease-out forwards; }
+  [aria-pressed="true"] .ill-fine .ill-barre rect:nth-child(1) { animation-delay: 1.5s; } [aria-pressed="true"] .ill-fine .ill-barre rect:nth-child(2) { animation-delay: 1.62s; }
+  [aria-pressed="true"] .ill-fine .ill-barre rect:nth-child(3) { animation-delay: 1.74s; } [aria-pressed="true"] .ill-fine .ill-barre rect:nth-child(4) { animation-delay: 1.86s; }
+  [aria-pressed="true"] .ill-fine .ill-barre rect:nth-child(5) { animation-delay: 1.98s; }
+  [aria-pressed="true"] .ill-ampl .ill-barre rect:nth-child(1) { animation-delay: .5s; } [aria-pressed="true"] .ill-ampl .ill-barre rect:nth-child(2) { animation-delay: .6s; }
+  [aria-pressed="true"] .ill-ampl .ill-barre rect:nth-child(3) { animation-delay: .7s; } [aria-pressed="true"] .ill-ampl .ill-barre rect:nth-child(4) { animation-delay: .8s; }
+  [aria-pressed="true"] .ill-ampl .ill-barre rect:nth-child(5) { animation-delay: .9s; }
+  @keyframes barra-ill { to { fill: var(--luce); } }
+  @media (prefers-reduced-motion: reduce) {
+    .opzione-radio[aria-pressed="true"], .opzione-radio[aria-pressed="true"] .ill *, .sopra-titolo, .sopra-sotto { animation: none !important; }
+    [aria-pressed="true"] .ill-fine .ill-ago, [aria-pressed="true"] .ill-fine .ill-lente, [aria-pressed="true"] .ill-manopola, [aria-pressed="true"] .ill-antenna, [aria-pressed="true"] .ill-segnale-ampio { transform: none; }
+    [aria-pressed="true"] .ill-barre rect { fill: var(--luce); }
+    .opzione-radio[aria-pressed="true"] { box-shadow: 0 0 0 3px color-mix(in srgb, var(--luce) 50%, transparent), 0 0 22px 3px color-mix(in srgb, var(--luce) 50%, transparent); }
+  }
   .scelta-radio .tasto-ambra:disabled { cursor: default; }
   /* nel pannello della cooperativa: la radio in uso */
   .radio-in-uso { --luce: var(--segnale-alone); }
   .radio-in-uso.fine { --luce: #1597BD; } .radio-in-uso.amplificata { --luce: #6FA300; }
   :root[data-attivo="scuro"] .radio-in-uso.fine { --luce: #38D3F2; } :root[data-attivo="scuro"] .radio-in-uso.amplificata { --luce: #B4EE3A; }
-  .radio-in-uso .opzione-segnale { width: 20px; height: 16px; border-radius: 4px; }
+  .radio-in-uso .opzione-segnale { flex: none; width: 20px; height: 16px; border-radius: 4px; background: var(--vetro); position: relative; overflow: hidden; box-shadow: inset 0 0 0 1.5px var(--corpo); }
+  .radio-in-uso .opzione-segnale::after { content: ""; position: absolute; top: 2px; bottom: 2px; left: 50%; width: 10px; transform: translateX(-50%); background: linear-gradient(90deg, transparent, var(--luce, var(--segnale-alone)), transparent); }
+  .radio-in-uso.fine .opzione-segnale::after { width: 5px; }
+  .radio-in-uso.amplificata .opzione-segnale::after { width: 16px; }
   .passaggio .sopra { margin: 0; font-size: clamp(15px, 4.4vh, 20px); font-size: clamp(15px, 4.4cqh, 20px); font-weight: 600; color: var(--tenue); max-width: 38ch; line-height: 1.3; text-wrap: balance; }
   .passaggio .lcd { width: min(480px, 100%); justify-content: center; gap: 18px; padding: clamp(10px, 3vh, 18px) 20px; padding: clamp(10px, 3cqh, 18px) 20px; box-shadow: inset 0 0 0 3px var(--corpo), inset 0 2px 8px rgba(0, 0, 0, .2); }
   .passaggio .lcd h2 { font-size: clamp(22px, 9vh, 40px); font-size: clamp(22px, 9cqh, 40px); overflow-wrap: anywhere; }
@@ -6810,12 +6872,12 @@ Capriccio | Bisogno
   const RICEZIONI = {
     standard: { nome: 'Ricezione standard', breve: 'Standard' },
     fine: {
-      nome: 'Sintonia fine', breve: 'Sintonia fine',
+      nome: 'Sintonia fine', breve: 'Sintonia fine', motto: 'Un segnale sottilissimo da cercare con precisione: fino a 6 punti',
       descrizione: 'Il segnale è stretto e va cercato con precisione, ma vale fino a 6 punti.',
       conseguenze: 'Resta attiva se fate 4, 5 o 6 punti. Con 3 o meno si torna in Ricezione standard.'
     },
     amplificata: {
-      nome: 'Ricezione amplificata', breve: 'Amplificata',
+      nome: 'Ricezione amplificata', breve: 'Amplificata', motto: 'L’antenna si allunga e il segnale si allarga: più facile da agganciare',
       descrizione: 'L’antenna allarga il segnale: si aggancia più facilmente, fino a 5 punti.',
       conseguenze: 'Resta attiva con 1, 2, 3 o 4 punti; con 5 potete scegliere di nuovo. Con 0 si torna in Ricezione standard.'
     }
@@ -6899,21 +6961,24 @@ Capriccio | Bisogno
 
   // Segnale pieno: la squadra sceglie come ricevere il prossimo round
   const sceltaRadio = document.getElementById('scelta-radio');
+  // i disegni delle due radio che si possono scegliere (si animano quando vengono scelte)
+  const DISEGNI_RADIO = {
+    fine: '<svg class="ill ill-fine" viewBox="0 0 240 128" aria-hidden="true"><defs><linearGradient id="ill-alone-fine" x1="0" x2="1"><stop offset="0" style="stop-color:var(--luce);stop-opacity:0"/><stop offset=".5" style="stop-color:var(--luce);stop-opacity:.55"/><stop offset="1" style="stop-color:var(--luce);stop-opacity:0"/></linearGradient></defs><line class="ill-antenna-fissa" x1="190" y1="40" x2="206" y2="12"/><circle class="ill-punta" cx="206" cy="11" r="4"/><path class="ill-maniglia" d="M78 40V31a7 7 0 0 1 7-7h46a7 7 0 0 1 7 7v9"/><rect class="ill-corpo" x="14" y="38" width="212" height="86" rx="17"/><rect class="ill-vetro" x="28" y="48" width="184" height="42" rx="8"/><g class="ill-tacche"><line x1="36.0" y1="52" x2="36.0" y2="60" class="ill-tl"/><line x1="40.2" y1="52" x2="40.2" y2="56" class="ill-tc"/><line x1="44.4" y1="52" x2="44.4" y2="56" class="ill-tc"/><line x1="48.6" y1="52" x2="48.6" y2="56" class="ill-tc"/><line x1="52.8" y1="52" x2="52.8" y2="56" class="ill-tc"/><line x1="57.0" y1="52" x2="57.0" y2="60" class="ill-tl"/><line x1="61.2" y1="52" x2="61.2" y2="56" class="ill-tc"/><line x1="65.4" y1="52" x2="65.4" y2="56" class="ill-tc"/><line x1="69.6" y1="52" x2="69.6" y2="56" class="ill-tc"/><line x1="73.8" y1="52" x2="73.8" y2="56" class="ill-tc"/><line x1="78.0" y1="52" x2="78.0" y2="60" class="ill-tl"/><line x1="82.2" y1="52" x2="82.2" y2="56" class="ill-tc"/><line x1="86.4" y1="52" x2="86.4" y2="56" class="ill-tc"/><line x1="90.6" y1="52" x2="90.6" y2="56" class="ill-tc"/><line x1="94.8" y1="52" x2="94.8" y2="56" class="ill-tc"/><line x1="99.0" y1="52" x2="99.0" y2="60" class="ill-tl"/><line x1="103.2" y1="52" x2="103.2" y2="56" class="ill-tc"/><line x1="107.4" y1="52" x2="107.4" y2="56" class="ill-tc"/><line x1="111.6" y1="52" x2="111.6" y2="56" class="ill-tc"/><line x1="115.8" y1="52" x2="115.8" y2="56" class="ill-tc"/><line x1="120.0" y1="52" x2="120.0" y2="60" class="ill-tl"/><line x1="124.2" y1="52" x2="124.2" y2="56" class="ill-tc"/><line x1="128.4" y1="52" x2="128.4" y2="56" class="ill-tc"/><line x1="132.6" y1="52" x2="132.6" y2="56" class="ill-tc"/><line x1="136.8" y1="52" x2="136.8" y2="56" class="ill-tc"/><line x1="141.0" y1="52" x2="141.0" y2="60" class="ill-tl"/><line x1="145.2" y1="52" x2="145.2" y2="56" class="ill-tc"/><line x1="149.4" y1="52" x2="149.4" y2="56" class="ill-tc"/><line x1="153.6" y1="52" x2="153.6" y2="56" class="ill-tc"/><line x1="157.8" y1="52" x2="157.8" y2="56" class="ill-tc"/><line x1="162.0" y1="52" x2="162.0" y2="60" class="ill-tl"/><line x1="166.2" y1="52" x2="166.2" y2="56" class="ill-tc"/><line x1="170.4" y1="52" x2="170.4" y2="56" class="ill-tc"/><line x1="174.6" y1="52" x2="174.6" y2="56" class="ill-tc"/><line x1="178.8" y1="52" x2="178.8" y2="56" class="ill-tc"/><line x1="183.0" y1="52" x2="183.0" y2="60" class="ill-tl"/><line x1="187.2" y1="52" x2="187.2" y2="56" class="ill-tc"/><line x1="191.4" y1="52" x2="191.4" y2="56" class="ill-tc"/><line x1="195.6" y1="52" x2="195.6" y2="56" class="ill-tc"/><line x1="199.8" y1="52" x2="199.8" y2="56" class="ill-tc"/><line x1="204.0" y1="52" x2="204.0" y2="60" class="ill-tl"/></g><g class="ill-griglia"><rect x="70" y="101" width="74" height="4" rx="2"/><rect x="70" y="109" width="74" height="4" rx="2"/></g><g class="ill-manopola"><circle cx="44" cy="107" r="10"/><line x1="44" y1="107" x2="44" y2="99"/></g><g class="ill-segnale-fine"><rect class="ill-alone" x="142" y="49" width="16" height="40" fill="url(#ill-alone-fine)"/><rect class="ill-nucleo" x="148.8" y="49" width="2.4" height="40"/></g><g class="ill-ago"><line x1="150" y1="46" x2="150" y2="92"/></g><g class="ill-lente"><circle class="vetro-lente-ill" cx="150" cy="69" r="21"/><line class="manico-lente-ill" x1="165" y1="84" x2="179" y2="98"/></g><g class="ill-scintille"><path class="ill-s1" d="M128 40l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path class="ill-s2" d="M176 52l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z"/></g><g class="ill-barre"><rect x="176" y="106" width="5" height="6" rx="1"/><rect x="184" y="103" width="5" height="9" rx="1"/><rect x="192" y="100" width="5" height="12" rx="1"/><rect x="200" y="97" width="5" height="15" rx="1"/><rect x="208" y="94" width="5" height="18" rx="1"/></g></svg>',
+    amplificata: '<svg class="ill ill-ampl" viewBox="0 0 240 128" aria-hidden="true"><defs><linearGradient id="ill-alone-ampl" x1="0" x2="1"><stop offset="0" style="stop-color:var(--luce);stop-opacity:0"/><stop offset=".3" style="stop-color:var(--luce);stop-opacity:.5"/><stop offset=".5" style="stop-color:var(--luce);stop-opacity:.9"/><stop offset=".7" style="stop-color:var(--luce);stop-opacity:.5"/><stop offset="1" style="stop-color:var(--luce);stop-opacity:0"/></linearGradient></defs><g class="ill-onde"><path class="ill-o1" d="M214 6a10 10 0 0 1 0 14"/><path class="ill-o2" d="M220 0a18 18 0 0 1 0 26"/><path class="ill-o3" d="M226 -6a26 26 0 0 1 0 38"/><path class="ill-o1 ill-sx" d="M198 6a10 10 0 0 0 0 14"/><path class="ill-o2 ill-sx" d="M192 0a18 18 0 0 0 0 26"/><path class="ill-o3 ill-sx" d="M186 -6a26 26 0 0 0 0 38"/></g><g class="ill-antenna"><line x1="190" y1="40" x2="206" y2="12"/><circle class="ill-punta" cx="206" cy="12" r="4"/></g><path class="ill-maniglia" d="M78 40V31a7 7 0 0 1 7-7h46a7 7 0 0 1 7 7v9"/><rect class="ill-corpo" x="14" y="38" width="212" height="86" rx="17"/><rect class="ill-vetro" x="28" y="48" width="184" height="42" rx="8"/><g class="ill-tacche"><line x1="36.0" y1="52" x2="36.0" y2="60" class="ill-tl"/><line x1="40.2" y1="52" x2="40.2" y2="56" class="ill-tc"/><line x1="44.4" y1="52" x2="44.4" y2="56" class="ill-tc"/><line x1="48.6" y1="52" x2="48.6" y2="56" class="ill-tc"/><line x1="52.8" y1="52" x2="52.8" y2="56" class="ill-tc"/><line x1="57.0" y1="52" x2="57.0" y2="60" class="ill-tl"/><line x1="61.2" y1="52" x2="61.2" y2="56" class="ill-tc"/><line x1="65.4" y1="52" x2="65.4" y2="56" class="ill-tc"/><line x1="69.6" y1="52" x2="69.6" y2="56" class="ill-tc"/><line x1="73.8" y1="52" x2="73.8" y2="56" class="ill-tc"/><line x1="78.0" y1="52" x2="78.0" y2="60" class="ill-tl"/><line x1="82.2" y1="52" x2="82.2" y2="56" class="ill-tc"/><line x1="86.4" y1="52" x2="86.4" y2="56" class="ill-tc"/><line x1="90.6" y1="52" x2="90.6" y2="56" class="ill-tc"/><line x1="94.8" y1="52" x2="94.8" y2="56" class="ill-tc"/><line x1="99.0" y1="52" x2="99.0" y2="60" class="ill-tl"/><line x1="103.2" y1="52" x2="103.2" y2="56" class="ill-tc"/><line x1="107.4" y1="52" x2="107.4" y2="56" class="ill-tc"/><line x1="111.6" y1="52" x2="111.6" y2="56" class="ill-tc"/><line x1="115.8" y1="52" x2="115.8" y2="56" class="ill-tc"/><line x1="120.0" y1="52" x2="120.0" y2="60" class="ill-tl"/><line x1="124.2" y1="52" x2="124.2" y2="56" class="ill-tc"/><line x1="128.4" y1="52" x2="128.4" y2="56" class="ill-tc"/><line x1="132.6" y1="52" x2="132.6" y2="56" class="ill-tc"/><line x1="136.8" y1="52" x2="136.8" y2="56" class="ill-tc"/><line x1="141.0" y1="52" x2="141.0" y2="60" class="ill-tl"/><line x1="145.2" y1="52" x2="145.2" y2="56" class="ill-tc"/><line x1="149.4" y1="52" x2="149.4" y2="56" class="ill-tc"/><line x1="153.6" y1="52" x2="153.6" y2="56" class="ill-tc"/><line x1="157.8" y1="52" x2="157.8" y2="56" class="ill-tc"/><line x1="162.0" y1="52" x2="162.0" y2="60" class="ill-tl"/><line x1="166.2" y1="52" x2="166.2" y2="56" class="ill-tc"/><line x1="170.4" y1="52" x2="170.4" y2="56" class="ill-tc"/><line x1="174.6" y1="52" x2="174.6" y2="56" class="ill-tc"/><line x1="178.8" y1="52" x2="178.8" y2="56" class="ill-tc"/><line x1="183.0" y1="52" x2="183.0" y2="60" class="ill-tl"/><line x1="187.2" y1="52" x2="187.2" y2="56" class="ill-tc"/><line x1="191.4" y1="52" x2="191.4" y2="56" class="ill-tc"/><line x1="195.6" y1="52" x2="195.6" y2="56" class="ill-tc"/><line x1="199.8" y1="52" x2="199.8" y2="56" class="ill-tc"/><line x1="204.0" y1="52" x2="204.0" y2="60" class="ill-tl"/></g><g class="ill-griglia"><rect x="70" y="101" width="74" height="4" rx="2"/><rect x="70" y="109" width="74" height="4" rx="2"/></g><g class="ill-manopola"><circle cx="44" cy="107" r="10"/><line x1="44" y1="107" x2="44" y2="99"/></g><g class="ill-segnale-ampio"><rect x="104" y="49" width="92" height="40" fill="url(#ill-alone-ampl)"/></g><g class="ill-ago ill-fermo"><line x1="150" y1="46" x2="150" y2="92"/></g><g class="ill-barre"><rect x="176" y="106" width="5" height="6" rx="1"/><rect x="184" y="103" width="5" height="9" rx="1"/><rect x="192" y="100" width="5" height="12" rx="1"/><rect x="200" y="97" width="5" height="15" rx="1"/><rect x="208" y="94" width="5" height="18" rx="1"/></g></svg>'
+  };
   function chiediRicezione(opzioni, poi) {
     const p = partita;
     let scelta = null;
-    document.getElementById('scelta-sopra').textContent = `Segnale pieno! Scegliete la radio per ${p.turno + 1 > ROUND_COLLAB ? 'il round bonus' : `il round ${p.turno + 1}`}`;
+    document.getElementById('scelta-sopra').innerHTML = '<span class="sopra-titolo">Sintonizzazione perfetta!</span><span class="sopra-sotto">La radio si trasforma!</span>';
     const carte = document.getElementById('scelta-opzioni');
     const ok = document.getElementById('scelta-ok');
     carte.replaceChildren(...opzioni.map(tipo => {
-      const r = RICEZIONI[tipo], b = BERSAGLI[tipo];
+      const r = RICEZIONI[tipo];
       const c = el('button', 'opzione-radio ' + tipo);
       c.type = 'button';
       c.setAttribute('aria-pressed', 'false');
-      const testa = el('span', 'opzione-testa');
-      testa.append(el('span', 'opzione-segnale'), el('span', 'opzione-nome', r.nome));
-      const dati = el('span', 'opzione-dati', `Bersaglio ${String(+(b.larghezze.reduce((x, y) => x + y, 0)).toFixed(2)).replace('.', ',')}% · fino a ${b.massimo} punti`);
-      c.append(testa, dati, el('span', 'opzione-descr', r.descrizione), el('span', 'opzione-dopo', r.conseguenze));
+      c.innerHTML = DISEGNI_RADIO[tipo];
+      c.append(el('span', 'opzione-nome', r.nome), el('span', 'opzione-motto', r.motto));
       if (tipo === p.bersaglio) c.append(el('span', 'opzione-attuale', 'Radio attuale'));
       c.addEventListener('click', () => {
         scelta = tipo;
