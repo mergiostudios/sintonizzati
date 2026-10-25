@@ -2145,46 +2145,65 @@
   .lcd .contatore.limitato:active { background: color-mix(in srgb, var(--vetro-segni) 15%, transparent); }
   .spia-prova { padding: 3px 8px; border-radius: 999px; background: var(--corallo); color: #fff; font: 9px/1 "Michroma", Verdana, sans-serif; letter-spacing: .08em; text-transform: uppercase; text-shadow: none; }
   .spia-prova[hidden] { display: none; }
-  .dialogo .pannello.pannello-negozio { width: min(940px, 100%); gap: clamp(8px, 2.2vh, 12px); gap: clamp(8px, 2.2cqh, 12px); }
-  .dialogo .regalo { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: color-mix(in srgb, var(--ambra) 22%, var(--tasto)); color: var(--su-tasto); font-size: clamp(13px, 3.6vh, 15px); font-size: clamp(13px, 3.6cqh, 15px); line-height: 1.3; }
+  /* la finestra del negozio sta sempre nello schermo: niente righe in più sotto le caselle */
+  .dialogo .pannello.pannello-negozio { width: min(900px, 100%); gap: 10px; padding: 12px; }
+  .pannello-negozio .lcd { padding-block: 7px; }
+  .pannello-negozio .lcd h2 { font-size: clamp(14px, 4vh, 18px); font-size: clamp(14px, 4cqh, 18px); }
+  .dialogo .regalo { display: flex; align-items: center; gap: 9px; padding: 6px 10px; border-radius: 10px; background: color-mix(in srgb, var(--ambra) 22%, var(--tasto)); color: var(--su-tasto); font-size: clamp(12px, 3.3vh, 14px); font-size: clamp(12px, 3.3cqh, 14px); line-height: 1.25; }
   .dialogo .regalo[hidden] { display: none; }
   .dialogo .regalo b { font-weight: 800; }
-  .ico-regalo { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 9px; background: var(--ambra); color: #2A1C00; }
-  .ico-regalo svg { width: 19px; height: 19px; }
-  .prodotti { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-  .prodotto { position: relative; display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 12px 12px 12px; border-radius: 12px; background: var(--tasto); color: var(--su-tasto); box-shadow: 0 4px 0 var(--tasto-ombra); margin-bottom: 4px; }
+  .testo-regalo { text-wrap: balance; }
+  .ico-regalo { display: grid; place-items: center; width: 28px; height: 28px; flex: none; border-radius: 8px; background: var(--ambra); color: #2A1C00; }
+  .ico-regalo svg { width: 17px; height: 17px; }
+  .prodotti { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .prodotto { position: relative; display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 9px 10px 10px; border-radius: 12px; background: var(--tasto); color: var(--su-tasto); box-shadow: 0 4px 0 var(--tasto-ombra); margin-bottom: 4px; }
   .prodotto.completo { box-shadow: 0 4px 0 var(--tasto-ombra), inset 0 0 0 2.5px var(--ambra); }
   .prodotto.evidenziato { animation: evidenzia-prodotto 1.4s ease-out .2s 1; }
   @keyframes evidenzia-prodotto { 0%, 100% { transform: none; } 20% { transform: translateY(-4px); box-shadow: 0 8px 0 var(--tasto-ombra), 0 0 0 3px var(--ambra); } }
-  .prodotto h3 { margin: 0; font-size: clamp(15px, 4.2vh, 18px); font-size: clamp(15px, 4.2cqh, 18px); font-weight: 800; line-height: 1.15; color: inherit; }
-  .etichetta-prodotto { align-self: flex-start; padding: 4px 8px; border-radius: 999px; background: var(--ambra); color: #2A1C00; font: 9px/1 "Michroma", Verdana, sans-serif; letter-spacing: .04em; }
-  .voci-prodotto { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; font-size: clamp(12.5px, 3.5vh, 14px); font-size: clamp(12.5px, 3.5cqh, 14px); font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.25; }
-  .voci-prodotto li { display: flex; align-items: center; gap: 7px; }
-  .voci-prodotto li::before { content: ""; width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--c); }
-  .nota-prodotto { align-self: flex-start; font: 9px/1 "Michroma", Verdana, sans-serif; letter-spacing: .03em; padding: 4px 8px; border: 1.5px solid currentColor; border-radius: 999px; color: var(--su-tasto-tenue); }
-  .dialogo .risparmio { padding: 0; font-size: 12.5px; line-height: 1.25; color: var(--su-tasto-tenue); font-weight: 600; }
-  .dialogo .risparmio b { color: var(--su-tasto); font-weight: 800; }
+  .prodotto h3 { margin: 0; font-size: clamp(14px, 3.9vh, 17px); font-size: clamp(14px, 3.9cqh, 17px); font-weight: 800; line-height: 1.15; color: inherit; }
+  .etichetta-prodotto { position: absolute; top: -8px; right: 8px; padding: 3px 7px; border-radius: 999px; background: var(--ambra); color: #2A1C00; font: 8.5px/1 "Michroma", Verdana, sans-serif; letter-spacing: .04em; box-shadow: 0 1px 0 var(--ambra-scura); }
+  .voci-prodotto { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; font-size: clamp(11.5px, 3.2vh, 13.5px); font-size: clamp(11.5px, 3.2cqh, 13.5px); font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.25; }
+  .voci-prodotto li { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .voci-prodotto li::before { content: ""; width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--c); }
+  .nota-prodotto { align-self: flex-start; font: 8.5px/1 "Michroma", Verdana, sans-serif; letter-spacing: .03em; padding: 3px 7px; border: 1.5px solid currentColor; border-radius: 999px; color: var(--su-tasto-tenue); }
+  .dialogo .risparmio { padding: 0; font-size: 11.5px; line-height: 1.2; color: var(--su-tasto); font-weight: 800; }
   .piede-prodotto { margin-top: auto; padding-top: 4px; }
-  .prodotto .compra { width: 100%; height: 42px; padding: 0 8px; font-size: 16px; white-space: nowrap; }
-  .prodotto .compra s { font-weight: 600; opacity: .6; margin-right: 4px; font-size: 13px; }
+  .prodotto .compra { position: relative; overflow: hidden; width: 100%; height: 38px; padding: 0 6px; font-size: 15px; white-space: nowrap; }
+  .prodotto .compra s { font-weight: 600; opacity: .6; margin-right: 4px; font-size: 12px; }
   .prodotto .compra.attesa { opacity: .6; pointer-events: none; }
   .prodotto .compra.solo-prezzo { cursor: default; background: transparent; color: var(--su-tasto); box-shadow: inset 0 0 0 2px var(--bordo); }
-  .posseduto { display: flex; align-items: center; justify-content: center; height: 42px; border-radius: 12px; background: color-mix(in srgb, var(--menta) 22%, transparent); color: var(--su-tasto); font-weight: 800; font-size: 15px; }
-  .dialogo .esito-negozio { min-height: 0; text-align: center; font-weight: 700; font-size: 15px; }
-  .dialogo .esito-negozio:empty { display: none; }
-  .azioni-negozio { align-items: center; flex-wrap: wrap; }
-  .dialogo .nota-negozio { margin-right: auto; font-size: 13px; font-weight: 600; opacity: .8; flex: 1 1 220px; }
+  /* il prezzo del gioco completo scintilla: un riflesso che attraversa il tasto e un piccolo bagliore */
+  .prodotto.completo .compra:not(.solo-prezzo) { animation: bagliore-prezzo 2.8s ease-in-out infinite; }
+  .prodotto.completo .compra::after {
+    content: ""; position: absolute; top: -20%; bottom: -20%; left: -60%; width: 45%; pointer-events: none;
+    background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, .15) 30%, rgba(255, 255, 255, .85) 50%, rgba(255, 255, 255, .15) 70%, transparent 100%);
+    transform: skewX(-18deg); animation: riflesso-prezzo 2.8s ease-in-out infinite;
+  }
+  .prodotto.completo .compra.solo-prezzo::after { opacity: .5; }
+  @keyframes riflesso-prezzo { 0%, 45% { left: -60%; } 75%, 100% { left: 125%; } }
+  @keyframes bagliore-prezzo { 0%, 40%, 100% { box-shadow: 0 5px 0 var(--ambra-scura), 0 0 0 0 rgba(255, 181, 46, 0); } 60% { box-shadow: 0 5px 0 var(--ambra-scura), 0 0 14px 2px rgba(255, 181, 46, .65); } }
+  @media (prefers-reduced-motion: reduce) { .prodotto.completo .compra, .prodotto.completo .compra::after { animation: none; } .prodotto.completo .compra::after { display: none; } }
+  .posseduto { display: flex; align-items: center; justify-content: center; height: 38px; border-radius: 12px; background: color-mix(in srgb, var(--menta) 22%, transparent); color: var(--su-tasto); font-weight: 800; font-size: 14px; }
+  /* in fondo: la nota del negozio, che lascia il posto al messaggio dopo un acquisto (sulla stessa riga, max due righe) */
+  .azioni-negozio { align-items: center; flex-wrap: nowrap; gap: 8px; padding-bottom: 4px; }
+  .dialogo .nota-negozio { margin-right: auto; min-width: 0; flex: 1 1 auto; font-size: 12.5px; font-weight: 600; line-height: 1.25; opacity: .85;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; padding: 0 2px; }
   .dialogo .nota-negozio a { color: inherit; }
-  .azioni-negozio .tastino { height: 44px; padding: 0 16px; font-size: 15px; }
+  .dialogo .esito-negozio { font-weight: 800; opacity: 1; }
+  .dialogo .nota-negozio:has(.esito-negozio:not(:empty)) { opacity: 1; }
+  .dialogo .nota-negozio:has(.esito-negozio:not(:empty)) #negozio-nota { display: none; }
+  .azioni-negozio .tastino { height: 40px; padding: 0 14px; font-size: 14.5px; flex: none; }
   .azioni-negozio .tastino[hidden] { display: none; }
-  @media (max-width: 600px) { .prodotti { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @container app (max-width: 600px) { .prodotti { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 720px) { .prodotto h3 { font-size: 15px; } .voci-prodotto { font-size: 12.5px; } .prodotto .compra { font-size: 15px; } .prodotto .compra s { display: block; font-size: 11px; margin: 0; line-height: 1; } }
-  @media (max-height: 420px) {
-    .prodotto { padding: 9px 10px; gap: 4px; }
-    .prodotto .compra, .posseduto { height: 38px; }
-    .dialogo .regalo { padding: 6px 10px; }
-    .azioni-negozio .tastino { height: 40px; }
+  @media (max-width: 600px) { .prodotti { gap: 6px; } .prodotto { padding: 7px 7px 8px; } .prodotto h3 { font-size: 13px; } .voci-prodotto { font-size: 11px; } .voci-prodotto li { gap: 4px; } .prodotto .compra { font-size: 13px; } .etichetta-prodotto { font-size: 7.5px; right: 4px; } }
+  @media (max-width: 720px) { .prodotto .compra { font-size: 14px; } .prodotto .compra s { display: block; font-size: 10.5px; margin: 0; line-height: 1; } }
+  @media (max-height: 380px) {
+    .dialogo:has(.pannello-negozio) { padding: 8px; }
+    .dialogo .pannello.pannello-negozio { gap: 7px; padding: 9px; }
+    .pannello-negozio .lcd { padding-block: 5px; }
+    .prodotto { padding: 7px 9px 8px; gap: 3px; }
+    .prodotto .compra, .posseduto, .azioni-negozio .tastino { height: 34px; }
+    .dialogo .regalo { padding: 4px 9px; }
+    .ico-regalo { width: 24px; height: 24px; } .ico-regalo svg { width: 15px; height: 15px; }
   }
 </style>
 </head>
@@ -2938,9 +2957,8 @@ Capriccio | Bisogno
       <div class="lcd"><h2 id="negozio-titolo">Negozio</h2><span class="lcd-destra"><span class="spia-prova" hidden>Prova</span><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></span></div>
       <p class="regalo" id="negozio-regalo"><span class="ico-regalo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9C9 9 6.5 7.5 7.5 5.2 8.6 2.8 11 5 12 9zM12 9c3 0 5.5-1.5 4.5-3.8C15.4 2.8 13 5 12 9z"/></svg></span><span class="testo-regalo"></span></p>
       <div class="prodotti" id="negozio-prodotti"></div>
-      <p class="esito-negozio" id="negozio-esito" aria-live="polite"></p>
       <div class="dialogo-azioni azioni-negozio">
-        <p class="nota-negozio" id="negozio-nota"></p>
+        <p class="nota-negozio"><span id="negozio-nota"></span><span class="esito-negozio" id="negozio-esito" aria-live="polite"></span></p>
         <button class="tastino" id="azzera-prova" type="button" hidden>Azzera prova</button>
         <button class="tastino" id="ripristina-acquisti" type="button" hidden>Ripristina acquisti</button>
         <button class="tastino" id="chiudi-negozio" type="button">Chiudi</button>
@@ -5810,9 +5828,8 @@ Capriccio | Bisogno
     const completo = haCompleto();
     regaloNegozio.hidden = possessi.size > 0;
     if (!regaloNegozio.hidden) {
-      const tot = carteAMTotali();
       regaloNegozio.querySelector('.testo-regalo').innerHTML =
-        `<b>Bonus primo acquisto:</b> qualunque cosa scegli, sblocchi anche <b>tutte le ${tot} carte</b> di Radio Merenda, Hit Parade e Onde Cerebrali (ora ne hai ${CARTE_GRATIS * 3}).`;
+        `<b>Bonus primo acquisto:</b> con l'acquisto di un qualsiasi pacchetto, sblocchi anche tutte le carte delle radio AM (ora ne hai solo ${CARTE_GRATIS * 3})`;
     }
     prodottiNegozio.replaceChildren(...PRODOTTI.map(p => {
       const c = el('article', 'prodotto' + (p.completo ? ' completo' : '') + (p.sku === evidenzia ? ' evidenziato' : ''));
@@ -5832,13 +5849,7 @@ Capriccio | Bisogno
       } else {
         const sku = p.completo ? skuCompleto() : p.sku;
         if (p.completo) {
-          const info = el('p', 'risparmio');
-          if (sku === 'gioco_completo') info.textContent = `Risparmi ${euro(9.97 - 6.99)} rispetto ai singoli acquisti`;
-          else {
-            const gia = PRODOTTI.filter(x => !x.completo && ha(x.sku)).map(x => x.nome).join(' e ');
-            info.innerHTML = `Hai già ${gia}: <b>paghi solo la differenza</b>`;
-          }
-          c.append(info);
+          if (sku !== 'gioco_completo') c.append(el('p', 'risparmio', 'Paghi solo la differenza'));
         }
         const b = el('button', 'tastino ambra compra');
         b.type = 'button';
@@ -5889,7 +5900,7 @@ Capriccio | Bisogno
         aggiornaBlocchi();
         disegnaNegozio();
         suona('stazioneTrovata'); vibra('vittoria');
-        esitoNegozio.textContent = `Grazie! Hai sbloccato ${nome}` + (primo ? ' e tutte le carte delle stazioni AM.' : '.');
+        esitoNegozio.textContent = `Grazie! Hai sbloccato ${nome}` + (primo ? ' e tutte le carte delle radio AM.' : '.');
         const arrivate = await sincronizzaServer();
         if (SERVER_ACQUISTI && !arrivate) esitoNegozio.textContent += ' Le nuove carte arriveranno appena c’è connessione.';
       }
