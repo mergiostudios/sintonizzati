@@ -991,6 +991,8 @@
   .tabellone li.segnato b { animation: punto .6s ease-out .9s both; }
   .risultati li.sq { padding-left: 8px; }
   .risultati li.sq span:nth-child(2) { white-space: normal; line-height: 1.2; font-size: 14px; }
+  /* "Conduttore" e "Tutti insieme" stanno sempre su una riga */
+  .turno .chi.ruolo-collab { font-size: clamp(18px, min(6.6vh, 3.5vw), 31px); font-size: clamp(18px, min(6.6cqh, 3.5cqw), 31px); white-space: nowrap; overflow-wrap: normal; }
   .turno .chi.sq { font-size: clamp(18px, 6.4vh, 28px); font-size: clamp(18px, 6.4cqh, 28px); }
   .turno .chi.sq.a { color: var(--ambra-testo); }
   .turno .chi.sq.b { color: var(--squadra-b-testo); }
@@ -1035,6 +1037,7 @@
   .campo.compattissimo .num { width: 17px; height: 17px; font-size: 9px; }
   .campo.compattissimo .risultati li.indizio span { font-size: 11.5px; }
   .campo.compattissimo .turno .chi { font-size: 22px; }
+  .campo.compattissimo .turno .chi.ruolo-collab { font-size: clamp(17px, min(6vh, 3.2vw), 22px); font-size: clamp(17px, min(6cqh, 3.2cqw), 22px); }
   .campo.compattissimo .turno .guadagno { font-size: 26px; margin: 0; }
   .campo.compattissimo .turno .tasto-ambra.piccolo { margin-top: 4px; height: auto; min-height: 34px; padding: 4px 6px; font-size: 11px; line-height: 1.15; letter-spacing: 0; }
   .campo.compattissimo .risultati .nome-indizio { display: none; }     /* il numero accanto dice già chi è */
@@ -1136,7 +1139,8 @@
   .collab-box .etichetta { font-size: clamp(13px, 3.6vh, 16px); font-size: clamp(13px, 3.6cqh, 16px); font-weight: 600; color: var(--tenue); }
   .collab-box .totale { font: 800 clamp(36px, 14vh, 62px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font: 800 clamp(36px, 14cqh, 62px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; color: var(--ambra-testo); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
   .collab-box .totale.segnato { animation: punto .6s ease-out .9s both; }
-  .pallini { display: grid; grid-template-columns: repeat(7, 11px); justify-content: center; gap: 6px; margin-top: 4px; }
+  .pallini { display: flex; justify-content: center; gap: 6px; margin-top: 4px; }   /* sempre centrati: col round bonus si aggiunge un pallino e si ricentrano */
+  .pallini i { flex: none; }
   .pallini i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--tenue); }
   .pallini i.giocato { background: var(--tenue); }
   .pallini i.corrente { border-color: var(--ambra); background: var(--ambra); box-shadow: 0 0 8px var(--ambra); }
@@ -2009,11 +2013,11 @@
     transition: background-color .2s, color .2s;
   }
   .copri-bersaglio[hidden] { display: none; }
-  /* un alone leggero che respira piano: si capisce che si può toccare, senza distrarre */
-  .copri-bersaglio { animation: invito-occhio 3.4s ease-in-out infinite; }
+  /* l'occhio pulsa sempre, in ambra: deve saltare all'occhio che si può nascondere il bersaglio */
+  .copri-bersaglio { animation: invito-occhio 1.8s ease-in-out infinite; }
   @keyframes invito-occhio {
-    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--vetro-segni) 0%, transparent), 0 0 4px color-mix(in srgb, var(--vetro-segni) 15%, transparent); }
-    50% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--vetro-segni) 16%, transparent), 0 0 10px color-mix(in srgb, var(--vetro-segni) 32%, transparent); }
+    0%, 100% { transform: translate(-50%, -50%) scale(1); border-color: color-mix(in srgb, var(--ambra) 60%, var(--vetro-segni)); box-shadow: 0 0 0 0 rgba(255, 181, 46, .6), 0 0 6px rgba(255, 181, 46, .35); }
+    50% { transform: translate(-50%, -50%) scale(1.1); border-color: var(--ambra); box-shadow: 0 0 0 8px rgba(255, 181, 46, 0), 0 0 18px rgba(255, 181, 46, .75); }
   }
   .copri-bersaglio::before { content: ""; position: absolute; inset: -10px; border-radius: 50%; }   /* più facile da toccare */
   .copri-bersaglio svg { width: 58%; height: 58%; }
@@ -2115,6 +2119,7 @@
     #manopola-corpo, .indice-manopola { transition: none; } .scintilla { opacity: 0; }
     .sfondo *, .cerca .led, .cerca .ascolto-nome, .in-onda.cerca .nome-onda { animation: none !important; }
     .copri-bersaglio, .lampada-onair, .voce-onda.nuova, .on-air, .on-air.spegne { animation: none !important; }
+    .copri-bersaglio { border-color: var(--ambra); box-shadow: 0 0 0 3px rgba(255, 181, 46, .35), 0 0 12px rgba(255, 181, 46, .55); }
     .tasto-zap .led, .stazioni .tasto.nego, .zap-onda.cerca *, .zap-onda.cerca .zap-display::before, .targhetta.cerca .tema-testo, .fine-zap .voce, .tasto-preset, .slot.memorizza .canale-tag, .wt .led, .etere *, :is(#schermata-collab, #schermata-riepilogo) .misuratore li, :is(#schermata-collab, #schermata-riepilogo) .misuratore li::before { animation: none !important; }
     #schermata-inizio.uscita *, #schermata-modi.rivela * { animation: none !important; }
     .onda-testo span, .lcd h2.sintonizzato, #schermata-gioco.accensione *, .estratto.scelto, .podio li, .premio, .premio .medaglia svg, .fine-squadra, .totale-fine { animation: none !important; }
@@ -7020,10 +7025,10 @@ Capriccio | Bisogno
     const p = partita, box = el('div', 'turno');
     const quale = p.turno > ROUND_COLLAB ? 'Round bonus' : `Round ${p.turno} di ${ROUND_COLLAB}`;
     if (p.fase === 'segreto') {
-      box.append(el('div', 'etichetta', quale), el('div', 'chi', 'Conduttore'),
+      box.append(el('div', 'etichetta', quale), el('div', 'chi ruolo-collab', 'Conduttore'),
         el('div', 'ruolo', 'Trova un indizio che porti al centro del bersaglio'), bottoneSicuro('Nascondi', nascondiCollab));
     } else if (p.fase === 'tentativo') {
-      box.append(el('div', 'etichetta', quale), el('div', 'chi', 'Tutti insieme'),
+      box.append(el('div', 'etichetta', quale), el('div', 'chi ruolo-collab', 'Tutti insieme'),
         el('div', 'ruolo', 'Mettete la lancetta dove pensate sia il centro'), bottoneSicuro('Conferma', confermaCollab));
     } else if (p.fase === 'rivelazione') {
       const e = p.esito;
