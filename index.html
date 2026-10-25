@@ -4850,14 +4850,15 @@ Capriccio | Bisogno
     scansione = setTimeout(giro, primo);
   }
   function fermaScansione() { clearTimeout(scansione); scansione = 0; }
-  // almeno tre stazioni, altrimenti lo zapping gira troppo poco: il tasto fa "no" e il display lo ricorda
-  const MIN_ZAPPING = 3;
-  function negaSpegnimento(b) {
+  // da 2 a 6 stazioni: con meno di 2 non c'è zapping, con più di 6 alcune non uscirebbero mai in una partita.
+  // Oltre i limiti il tasto fa "no" e il display lo ricorda
+  const MIN_ZAPPING = 2, MAX_ZAPPING = 6;
+  function negaSpegnimento(b, testo = `almeno ${MIN_ZAPPING} stazioni`) {
     suona('errore'); vibra('errore');
     b.classList.remove('nego'); void b.offsetWidth; b.classList.add('nego');
     clearTimeout(avvisoContatore);
     contaCarte.classList.remove('limitato');
-    contaCarte.textContent = `almeno ${MIN_ZAPPING} stazioni`;
+    contaCarte.textContent = testo;
     avvisoContatore = setTimeout(() => { avvisoContatore = 0; mostraStazione(); }, 1600);
   }
   function alternaInScaletta(b) {
@@ -4869,6 +4870,7 @@ Capriccio | Bisogno
       togliDalNastro(id);
       if (id === inScansione) passoScansione(); else mostraStazione();
     } else {
+      if (scalettaZapping.size >= MAX_ZAPPING) { negaSpegnimento(b, `massimo ${MAX_ZAPPING} stazioni`); return; }
       scalettaZapping.add(id);
       suona('led');
       aggiungiAlNastro(id);
@@ -4983,6 +4985,8 @@ Capriccio | Bisogno
     if (zapping) {
       // si parte dalla stazione che si stava ascoltando, che entra in scaletta (anche se pirata)
       scalettaZapping.add(stazioneScelta);
+      // non più di 6: se la stazione in ascolto ha fatto superare il limite, esce l'ultima della scaletta
+      while (scalettaZapping.size > MAX_ZAPPING) scalettaZapping.delete(scalettaOrdinata().filter(x => x !== stazioneScelta).pop());
       inScansione = stazioneScelta;
       mostraStazione();
       avviaNastro();
