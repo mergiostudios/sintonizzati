@@ -2203,6 +2203,14 @@
   .dialogo .nota-negozio:has(.esito-negozio:not(:empty)) #negozio-nota { display: none; }
   .azioni-negozio .tastino { height: 40px; padding: 0 14px; font-size: 14.5px; flex: none; }
   .azioni-negozio .tastino[hidden] { display: none; }
+  /* sblocco per i tester (solo durante lo sviluppo): un tastino discreto e un campo per il codice */
+  .tasto-tester { flex: none; align-self: center; padding: 4px 8px; border: 1.5px dashed currentColor; border-radius: 999px; background: transparent; color: var(--su-corpo); opacity: .55; font: 9px/1 "Michroma", Verdana, sans-serif; letter-spacing: .05em; cursor: pointer; }
+  .tasto-tester.attivo { opacity: .9; border-style: solid; color: var(--menta); }
+  .campo-tester { display: flex; gap: 6px; flex: 1 1 auto; min-width: 0; margin-right: auto; }
+  .campo-tester[hidden] { display: none; }
+  .campo-tester input { min-width: 0; flex: 1 1 auto; max-width: 220px; height: 40px; padding: 0 12px; border: 2px solid var(--bordo); border-radius: 10px; background: var(--tasto); color: var(--su-tasto); font: 600 15px "Bricolage Grotesque", system-ui, sans-serif; }
+  .campo-tester .tastino { height: 40px; padding: 0 14px; }
+  .azioni-negozio:has(.campo-tester:not([hidden])) .nota-negozio { display: none; }
   @media (max-width: 600px) { .dialogo:has(.pannello-negozio) { --margine-lati: max(28px, calc(env(safe-area-inset-left, 0px) + 10px), calc(env(safe-area-inset-right, 0px) + 10px)); } .prodotti { gap: 6px; } .prodotto { padding: 6px 7px 7px; } .prodotto h3 { font-size: 12.5px; } .voci-prodotto { font-size: 10.5px; } .dialogo .regalo { font-size: 11.5px; } .voci-prodotto li { gap: 4px; } .prodotto .compra { font-size: 13px; } .etichetta-prodotto { font-size: 7.5px; right: 4px; } }
   @media (max-width: 720px) { .prodotto .compra { font-size: 14px; } .prodotto .compra s { display: block; font-size: 10.5px; margin: 0; line-height: 1; } }
   @media (max-height: 380px) {
@@ -2895,26 +2903,26 @@ Capriccio | Bisogno
       <div class="scheda interruttori">
         <div class="riga-imp">
           <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></span>
-          <span class="testo-imp"><span id="imp-audio-titolo">Audio</span><small>Suoni ed effetti del gioco</small></span>
+          <span class="testo-imp"><span id="imp-audio-titolo">Audio</span></span>
           <button class="interruttore" role="switch" aria-checked="true" data-imp="audio" aria-labelledby="imp-audio-titolo"><span class="cursore"></span></button>
         </div>
         <div class="riga-imp">
           <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>
-          <span class="testo-imp"><span id="imp-musica-titolo">Musica</span><small>Il sottofondo di ogni stazione</small></span>
+          <span class="testo-imp"><span id="imp-musica-titolo">Musica</span></span>
           <button class="interruttore" role="switch" aria-checked="true" data-imp="musica" aria-labelledby="imp-musica-titolo"><span class="cursore"></span></button>
         </div>
         <div class="riga-imp">
           <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M3 8v8M21 8v8"/></svg></span>
-          <span class="testo-imp"><span id="imp-vibrazione-titolo">Vibrazione</span><small>Vibra durante i momenti importanti</small></span>
+          <span class="testo-imp"><span id="imp-vibrazione-titolo">Vibrazione</span></span>
           <button class="interruttore" role="switch" aria-checked="true" data-imp="vibrazione" aria-labelledby="imp-vibrazione-titolo"><span class="cursore"></span></button>
         </div>
         <div class="riga-imp">
           <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
-          <span class="testo-imp"><span id="imp-daltonico-titolo">Modalità daltonici</span><small>Colori più facili da distinguere</small></span>
+          <span class="testo-imp"><span id="imp-daltonico-titolo">Modalità daltonici</span></span>
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.24</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.25</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -2968,6 +2976,8 @@ Capriccio | Bisogno
       <div class="prodotti" id="negozio-prodotti"></div>
       <div class="dialogo-azioni azioni-negozio">
         <p class="nota-negozio"><span id="negozio-nota"></span><span class="esito-negozio" id="negozio-esito" aria-live="polite"></span></p>
+        <form class="campo-tester" id="campo-tester" hidden><input id="codice-tester" type="text" placeholder="Codice tester" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Codice tester"><button class="tastino ambra" type="submit">OK</button></form>
+        <button class="tasto-tester" id="tasto-tester" type="button">Tester</button>
         <button class="tastino" id="azzera-prova" type="button" hidden>Azzera prova</button>
         <button class="tastino" id="ripristina-acquisti" type="button" hidden>Ripristina acquisti</button>
         <button class="tastino" id="chiudi-negozio" type="button">Chiudi</button>
@@ -4647,7 +4657,7 @@ Capriccio | Bisogno
   function impostaBanda(nuova, giaScattata) {
     if (nuova === bandaVisibile) { ruotaManopola(ANGOLO[nuova]); return; }
     // per entrare nelle Frequenze Pirata serve la conferma dei maggiorenni
-    if (nuova === 'pirata' && sblocca('pirata') && !maggiorenni()) { ruotaManopola(ANGOLO.pirata); chiediMaggiorenni(); return; }
+    if (nuova === 'pirata' && !maggiorenni()) { ruotaManopola(ANGOLO.pirata); chiediMaggiorenni(); return; }
     bandaVisibile = nuova;
     suona('cambioBanda', { fm: nuova !== 'am' });
     if (!giaScattata) vibraScatto('scatto');    // trascinando, lo scatto si è già sentito passando sulla tacca
@@ -5643,6 +5653,9 @@ Capriccio | Bisogno
   try { tokenAcquisti = JSON.parse(localStorage.getItem('sintonizzati-token')) || {}; } catch (e) {}
   function salvaToken() { try { localStorage.setItem('sintonizzati-token', JSON.stringify(tokenAcquisti)); } catch (e) {} }
   var chiaveProva = '';
+  // sblocco per i tester, finché il gioco è in sviluppo: con il codice giusto (CHIAVE_PROVA sul server) si ha tutto
+  var codiceTester = '';
+  try { codiceTester = localStorage.getItem('sintonizzati-codice-tester') || ''; } catch (e) {}
   var LINK_PLAY = 'https://play.google.com/store/apps/details?id=it.mergiostudios.sintonizzati';
   var CARTE_GRATIS = 30;
   var PRODOTTI = [
@@ -5668,10 +5681,12 @@ Capriccio | Bisogno
     if (chiave) sessionStorage.setItem('sintonizzati-chiave-prova', chiave);
     negozioProva = sessionStorage.getItem('sintonizzati-negozio-prova') === '1';
     chiaveProva = sessionStorage.getItem('sintonizzati-chiave-prova') || '';
+    if (codiceTester) chiaveProva = codiceTester;
   } catch (e) {}
   var CHIAVE_ACQUISTI = negozioProva ? 'sintonizzati-acquisti-prova' : 'sintonizzati-acquisti';
   try { (JSON.parse(localStorage.getItem(CHIAVE_ACQUISTI)) || []).forEach(s => { if (TUTTI_SKU.includes(s)) possessi.add(s); }); } catch (e) {}
   function salvaPossessi() { try { localStorage.setItem(CHIAVE_ACQUISTI, JSON.stringify([...possessi])); } catch (e) {} }
+  if (codiceTester) possessi.add('gioco_completo');
 
   function ha(sku) { return possessi.has(sku); }
   function haCompleto() {
@@ -5705,11 +5720,12 @@ Capriccio | Bisogno
   }
   applicaCarteServer();
   // Il server verifica gli acquisti con Google, li conferma e manda le carte a cui si ha diritto
-  var sincronizzazione = null;
+  var sincronizzazione = null, ultimaRisposta = null;
   function sincronizzaServer() {
     if (!SERVER_ACQUISTI) return Promise.resolve(false);
     if (sincronizzazione) return sincronizzazione;
     const acquisti = [...possessi].map(p => ({ prodotto: p, token: negozioProva ? 'prova' : tokenAcquisti[p] })).filter(a => a.token);
+    if (codiceTester && !acquisti.some(a => a.prodotto === 'gioco_completo' && a.token === 'prova')) acquisti.push({ prodotto: 'gioco_completo', token: 'prova' });
     const ctrl = window.AbortController ? new AbortController() : null;
     const scadenza = setTimeout(() => ctrl && ctrl.abort(), 12000);
     sincronizzazione = fetch(SERVER_ACQUISTI.replace(/\/$/, '') + '/acquisti', {
@@ -5719,6 +5735,7 @@ Capriccio | Bisogno
       .then(r => (r.ok ? r.json() : Promise.reject()))
       .then(d => {
         // nell'app vale quello che dice il server (un acquisto rimborsato sparisce); se Google non ha risposto, si tiene
+        ultimaRisposta = d;
         if (servizioPlay && !negozioProva) { possessi = new Set([...(d.validi || []), ...(d.nonVerificati || [])]); salvaPossessi(); }
         carteServer = { mazzi: d.mazzi || {}, totali: d.totali || null };
         try { localStorage.setItem(CHIAVE_CARTE_SERVER, JSON.stringify(carteServer)); } catch (e) {}
@@ -5928,6 +5945,50 @@ Capriccio | Bisogno
   tastoAzzeraProva.addEventListener('click', () => {
     possessi.clear(); salvaPossessi(); aggiornaBlocchi(); disegnaNegozio();
     esitoNegozio.textContent = 'Acquisti di prova azzerati.';
+  });
+  const tastoTester = document.getElementById('tasto-tester');
+  const campoTester = document.getElementById('campo-tester');
+  const inputTester = document.getElementById('codice-tester');
+  function aggiornaTester() {
+    tastoTester.classList.toggle('attivo', !!codiceTester);
+    tastoTester.textContent = codiceTester ? 'Tester ✓' : 'Tester';
+  }
+  aggiornaTester();
+  tastoTester.addEventListener('click', () => {
+    esitoNegozio.textContent = '';
+    if (codiceTester) {                 // già attivo: si spegne
+      codiceTester = ''; chiaveProva = '';
+      try { localStorage.removeItem('sintonizzati-codice-tester'); } catch (e) {}
+      possessi.delete('gioco_completo'); salvaPossessi();
+      aggiornaTester(); aggiornaBlocchi(); disegnaNegozio(); sincronizzaServer();
+      esitoNegozio.textContent = 'Sblocco tester disattivato.';
+      return;
+    }
+    campoTester.hidden = !campoTester.hidden;
+    if (!campoTester.hidden) inputTester.focus();
+  });
+  campoTester.addEventListener('submit', async e => {
+    e.preventDefault();
+    const codice = inputTester.value.trim();
+    if (!codice) return;
+    codiceTester = codice; chiaveProva = codice;
+    possessi.add('gioco_completo');
+    const ok = await sincronizzaServer();
+    const valido = ok && ultimaRisposta && (ultimaRisposta.validi || []).includes('gioco_completo');
+    if (valido) {
+      try { localStorage.setItem('sintonizzati-codice-tester', codice); } catch (e) {}
+      salvaPossessi();
+      campoTester.hidden = true; inputTester.value = '';
+      suona('stazioneTrovata');
+      esitoNegozio.textContent = 'Modalità tester attiva: tutto sbloccato su questo telefono.';
+    } else {
+      codiceTester = ''; chiaveProva = '';
+      possessi.delete('gioco_completo');
+      suona('errore');
+      campoTester.hidden = true;
+      esitoNegozio.textContent = ok ? 'Codice non valido.' : 'Serve internet per controllare il codice.';
+    }
+    aggiornaTester(); aggiornaBlocchi(); disegnaNegozio();
   });
   document.getElementById('chiudi-negozio').addEventListener('click', chiudiNegozio);
   document.getElementById('apri-negozio').addEventListener('click', e => apriNegozio(null, e.currentTarget));
