@@ -1184,6 +1184,9 @@
   @keyframes alveare-favo { from { opacity: 0; } }
 
   .collab-box { display: grid; justify-items: center; gap: 4px; text-align: center; }
+  /* la radio in uso, sotto i pallini dei round: centrata come il resto; se va a capo, le due righe restano centrate */
+  .collab-box .radio-in-uso { max-width: 100%; justify-content: center; text-align: center; }
+  .collab-box .radio-in-uso .nome-radio { min-width: 0; text-wrap: balance; }
   .collab-box .etichetta { font-size: clamp(13px, 3.6vh, 16px); font-size: clamp(13px, 3.6cqh, 16px); font-weight: 600; color: var(--tenue); }
   .collab-box .totale { font: 800 clamp(36px, 14vh, 62px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; font: 800 clamp(36px, 14cqh, 62px)/1.1 "Bricolage Grotesque", system-ui, sans-serif; color: var(--ambra-testo); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
   .collab-box .totale.segnato { animation: punto .6s ease-out .9s both; }
@@ -2469,7 +2472,14 @@
   :root[data-attivo="scuro"] .gd-radio.fine { --luce: #38D3F2; } :root[data-attivo="scuro"] .gd-radio.amplificata { --luce: #B4EE3A; }
   .gd-radio .ill { height: clamp(70px, 26vh, 130px); height: clamp(70px, 26cqh, 130px); filter: none; opacity: 1; margin: 0; }
   .gd-radio b { font-size: clamp(11px, 3.2vh, 14px); font-size: clamp(11px, 3.2cqh, 14px); color: var(--su-tasto); }
-  .gd-freq { width: min(120px, 82%); height: auto; margin-bottom: 6px; overflow: visible; }
+  .gd-freq { width: min(120px, 82%); height: auto; margin-bottom: 3px; overflow: visible; }
+  /* quanto vale il centro: in Sintonia fine 6 punti (più difficile ma vale di più), in Ricezione amplificata 5 */
+  .gd-valore { font-size: clamp(10px, 3vh, 12px); font-size: clamp(10px, 3cqh, 12px); font-weight: 700; line-height: 1; padding: 3px 8px; border-radius: 999px; margin-bottom: 5px;
+    color: var(--su-tasto); background: color-mix(in srgb, var(--su-tasto) 12%, transparent); }
+  .gd-valore b { font: 400 1.15em/1 "Michroma", Verdana, sans-serif; }
+  .gd-valore.top { background: var(--zona-oro); color: #2A1C00; box-shadow: 0 0 10px color-mix(in srgb, var(--zona-oro) 70%, transparent); }
+  .attiva .gd-valore.top { animation: gd-valore 1.8s ease-in-out infinite; }
+  @keyframes gd-valore { 50% { box-shadow: 0 0 16px 3px color-mix(in srgb, var(--zona-oro) 75%, transparent); } }
   .gd-freq .vetro { fill: var(--vetro); stroke: var(--corpo); stroke-width: 2; } .gd-freq .luce { fill: var(--luce); }
   .gd-cinque { font: 400 12px/1 "Michroma", Verdana, sans-serif; padding: 5px 10px; border-radius: 999px; background: var(--ambra); color: #2A1C00; margin-bottom: 4px; grid-column: 1 / -1; justify-self: center; }
 
@@ -2683,7 +2693,7 @@
   .attiva .gd-cb3-fumetto { animation: gd-cb3-fumetto 8s ease-out infinite; }
   .attiva .gd-cb3-tel { animation: gd-cb3-tel 8s cubic-bezier(.7, 0, .25, 1) infinite; }
   .attiva .gd-cb3-freccia { animation: gd-cb3-freccia 8s ease-out infinite, gd-flusso 1s linear infinite; }
-  .attiva .gd-cb3-altro.c0 { animation: gd-cb3-primo 8s ease-out infinite; }
+  .attiva .gd-cb3-altro { animation: gd-cb3-primo 8s ease-out calc(var(--i) * .12s) infinite; }
   @keyframes gd-cb3-mano { 0%, 3% { opacity: 0; transform: translate(16px, 18px); } 8% { opacity: 1; transform: none; } 11% { transform: translate(0, 3px); } 13%, 19% { transform: none; } 22% { transform: translate(0, 3px); } 24% { opacity: 1; transform: none; } 29%, 100% { opacity: 0; transform: translate(16px, 18px); } }
   @keyframes gd-cb3-premi { 0%, 10% { transform: none; } 11% { transform: translateY(4px); } 13%, 21% { transform: none; } 22% { transform: translateY(4px); } 24%, 100% { transform: none; } }
   @keyframes gd-cb3-tasto { 0%, 25% { opacity: 1; } 31%, 100% { opacity: 0; } }
@@ -5717,8 +5727,8 @@ Capriccio | Bisogno
       `<rect class="luce" x="${60 - tutta / 2}" y="3" width="${tutta}" height="16" style="opacity:.3"/><rect class="luce" x="${60 - meta / 2}" y="3" width="${meta}" height="16" style="opacity:.6"/>` +
       `<rect class="luce" x="${60 - cuore / 2}" y="3" width="${cuore}" height="16"/></svg>`;
     return `<div class="gd-due" aria-hidden="true">` +
-      `<div class="gd-radio fine">${frequenza(22, 11, 2.5)}${senzaId(DISEGNI_RADIO.fine)}<b>Sintonia fine</b></div>` +
-      `<div class="gd-radio amplificata">${frequenza(56, 36, 16)}${senzaId(DISEGNI_RADIO.amplificata)}<b>Ricezione amplificata</b></div></div>`;
+      `<div class="gd-radio fine">${frequenza(22, 11, 2.5)}<span class="gd-valore top">Centro da <b>6</b> punti</span>${senzaId(DISEGNI_RADIO.fine)}<b>Sintonia fine</b></div>` +
+      `<div class="gd-radio amplificata">${frequenza(56, 36, 16)}<span class="gd-valore">Centro da <b>5</b> punti</span>${senzaId(DISEGNI_RADIO.amplificata)}<b>Ricezione amplificata</b></div></div>`;
   }
   function apriGuida(modo, da) {
     const g = GUIDE[modo];
@@ -7732,7 +7742,7 @@ Capriccio | Bisogno
     box.append(pallini);
     // la radio in uso in questo round
     const radio = el('div', 'legenda radio-in-uso ' + p.bersaglio);
-    radio.append(el('span', 'opzione-segnale'), RICEZIONI[p.bersaglio].nome);
+    radio.append(el('span', 'opzione-segnale'), el('span', 'nome-radio', RICEZIONI[p.bersaglio].nome));
     box.append(radio);
     latoSx.append(box);
   }
