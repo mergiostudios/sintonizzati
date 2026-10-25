@@ -2146,7 +2146,12 @@
   .spia-prova { padding: 3px 8px; border-radius: 999px; background: var(--corallo); color: #fff; font: 9px/1 "Michroma", Verdana, sans-serif; letter-spacing: .08em; text-transform: uppercase; text-shadow: none; }
   .spia-prova[hidden] { display: none; }
   /* la finestra del negozio sta sempre nello schermo: niente righe in più sotto le caselle */
-  .dialogo .pannello.pannello-negozio { width: min(900px, 100%); gap: 10px; padding: 12px; }
+  .dialogo .pannello.pannello-negozio { width: min(840px, 100%); gap: 10px; padding: 12px; }
+  /* il negozio si tiene lontano dai bordi: sui telefoni con la fotocamera nello schermo non ci finisce sotto */
+  .dialogo:has(.pannello-negozio) {
+    --margine-lati: max(clamp(16px, 7vw, 72px), calc(env(safe-area-inset-left, 0px) + 14px), calc(env(safe-area-inset-right, 0px) + 14px));
+    padding-left: var(--margine-lati); padding-right: var(--margine-lati);
+  }
   .pannello-negozio .lcd { padding-block: 7px; }
   .pannello-negozio .lcd h2 { font-size: clamp(14px, 4vh, 18px); font-size: clamp(14px, 4cqh, 18px); }
   .dialogo .regalo { display: flex; align-items: center; gap: 9px; padding: 6px 10px; border-radius: 10px; background: color-mix(in srgb, var(--ambra) 22%, var(--tasto)); color: var(--su-tasto); font-size: clamp(12px, 3.3vh, 14px); font-size: clamp(12px, 3.3cqh, 14px); line-height: 1.25; }
@@ -2158,8 +2163,12 @@
   .prodotti { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
   .prodotto { position: relative; display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 9px 10px 10px; border-radius: 12px; background: var(--tasto); color: var(--su-tasto); box-shadow: 0 4px 0 var(--tasto-ombra); margin-bottom: 4px; }
   .prodotto.completo { box-shadow: 0 4px 0 var(--tasto-ombra), inset 0 0 0 2.5px var(--ambra); }
-  .prodotto.evidenziato { animation: evidenzia-prodotto 1.4s ease-out .2s 1; }
-  @keyframes evidenzia-prodotto { 0%, 100% { transform: none; } 20% { transform: translateY(-4px); box-shadow: 0 8px 0 var(--tasto-ombra), 0 0 0 3px var(--ambra); } }
+  /* il pacchetto che si stava cercando (es. toccando una stazione FM) si illumina piano, a intermittenza */
+  .prodotto.evidenziato { animation: evidenzia-prodotto 2.4s ease-in-out .2s infinite; }
+  .prodotto.completo.evidenziato { animation-name: evidenzia-prodotto-completo; }
+  @keyframes evidenzia-prodotto { 0%, 100% { box-shadow: 0 4px 0 var(--tasto-ombra), 0 0 0 0 rgba(255, 181, 46, 0); } 50% { box-shadow: 0 4px 0 var(--tasto-ombra), 0 0 0 3px var(--ambra), 0 0 18px 4px rgba(255, 181, 46, .55); } }
+  @keyframes evidenzia-prodotto-completo { 0%, 100% { box-shadow: 0 4px 0 var(--tasto-ombra), inset 0 0 0 2.5px var(--ambra), 0 0 0 0 rgba(255, 181, 46, 0); } 50% { box-shadow: 0 4px 0 var(--tasto-ombra), inset 0 0 0 2.5px var(--ambra), 0 0 0 3px var(--ambra), 0 0 18px 4px rgba(255, 181, 46, .55); } }
+  @media (prefers-reduced-motion: reduce) { .prodotto.evidenziato { animation: none; box-shadow: 0 4px 0 var(--tasto-ombra), 0 0 0 3px var(--ambra); } }
   .prodotto h3 { margin: 0; font-size: clamp(14px, 3.9vh, 17px); font-size: clamp(14px, 3.9cqh, 17px); font-weight: 800; line-height: 1.15; color: inherit; }
   .etichetta-prodotto { position: absolute; top: -8px; right: 8px; padding: 3px 7px; border-radius: 999px; background: var(--ambra); color: #2A1C00; font: 8.5px/1 "Michroma", Verdana, sans-serif; letter-spacing: .04em; box-shadow: 0 1px 0 var(--ambra-scura); }
   .voci-prodotto { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; font-size: clamp(11.5px, 3.2vh, 13.5px); font-size: clamp(11.5px, 3.2cqh, 13.5px); font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.25; }
@@ -2194,10 +2203,10 @@
   .dialogo .nota-negozio:has(.esito-negozio:not(:empty)) #negozio-nota { display: none; }
   .azioni-negozio .tastino { height: 40px; padding: 0 14px; font-size: 14.5px; flex: none; }
   .azioni-negozio .tastino[hidden] { display: none; }
-  @media (max-width: 600px) { .prodotti { gap: 6px; } .prodotto { padding: 7px 7px 8px; } .prodotto h3 { font-size: 13px; } .voci-prodotto { font-size: 11px; } .voci-prodotto li { gap: 4px; } .prodotto .compra { font-size: 13px; } .etichetta-prodotto { font-size: 7.5px; right: 4px; } }
+  @media (max-width: 600px) { .dialogo:has(.pannello-negozio) { --margine-lati: max(28px, calc(env(safe-area-inset-left, 0px) + 10px), calc(env(safe-area-inset-right, 0px) + 10px)); } .prodotti { gap: 6px; } .prodotto { padding: 6px 7px 7px; } .prodotto h3 { font-size: 12.5px; } .voci-prodotto { font-size: 10.5px; } .dialogo .regalo { font-size: 11.5px; } .voci-prodotto li { gap: 4px; } .prodotto .compra { font-size: 13px; } .etichetta-prodotto { font-size: 7.5px; right: 4px; } }
   @media (max-width: 720px) { .prodotto .compra { font-size: 14px; } .prodotto .compra s { display: block; font-size: 10.5px; margin: 0; line-height: 1; } }
   @media (max-height: 380px) {
-    .dialogo:has(.pannello-negozio) { padding: 8px; }
+    .dialogo:has(.pannello-negozio) { padding-top: 8px; padding-bottom: 8px; }
     .dialogo .pannello.pannello-negozio { gap: 7px; padding: 9px; }
     .pannello-negozio .lcd { padding-block: 5px; }
     .prodotto { padding: 7px 9px 8px; gap: 3px; }
