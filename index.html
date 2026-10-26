@@ -1459,6 +1459,14 @@
     position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
     padding: 16px; background: rgba(8, 25, 29, .55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
   }
+  /* avviso "fai di nuovo indietro per uscire" */
+  .avviso-uscita {
+    position: absolute; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); z-index: 60; translate: -50% 12px; opacity: 0;
+    padding: 10px 18px; border-radius: 999px; background: var(--corpo); color: var(--su-corpo); font-size: 14px; font-weight: 700;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .3); pointer-events: none; transition: opacity .25s, translate .25s; white-space: nowrap;
+  }
+  .avviso-uscita.visibile { opacity: 1; translate: -50% 0; }
+  .avviso-uscita[hidden] { display: none; }
   .dialogo[hidden] { display: none; }
   .dialogo .pannello { width: min(480px, 100%); max-height: 100%; overflow-y: auto; }
   .dialogo p { margin: 0; padding: 0 4px; font-size: clamp(15px, 4.4vh, 18px); font-size: clamp(15px, 4.4cqh, 18px); line-height: 1.35; color: var(--su-corpo); }
@@ -5047,12 +5055,30 @@ Capriccio | Bisogno
      Nelle schermate dove uscire per sbaglio farebbe perdere qualcosa (nomi, partita, risultato)
      o quando c'è una finestra aperta, teniamo una voce in più nella cronologia: il tasto indietro
      la consuma e noi decidiamo cosa fare, invece di chiudere l'app.
-     Nella schermata iniziale e nella scelta della modalità, invece, l'app si chiude come al solito. */
+     Nella schermata iniziale e nella scelta della modalità il primo "indietro" (anche lo swipe laterale)
+     mostra solo un avviso: l'app si chiude con un secondo "indietro" entro un paio di secondi. */
   const SCHERMATE_PROTETTE = ['schermata-stazione', 'schermata-singoli', 'schermata-squadre', 'schermata-collab', 'schermata-riepilogo', 'schermata-gioco', 'schermata-fine'];
-  let guardiaAttiva = false, ignoraIndietro = false;
+  let guardiaAttiva = false, ignoraIndietro = false, uscitaArmata = false, timerUscita = 0;
   function serveGuardia() {
-    return SCHERMATE_PROTETTE.includes(app.dataset.schermata) || [...document.querySelectorAll('.dialogo')].some(d => !d.hidden);
+    if (SCHERMATE_PROTETTE.includes(app.dataset.schermata) || [...document.querySelectorAll('.dialogo')].some(d => !d.hidden)) return true;
+    return !uscitaArmata;          // nelle altre schermate la guardia c'è sempre, tranne nei due secondi dopo l'avviso
   }
+  const avvisoUscita = document.createElement('div');
+  avvisoUscita.className = 'avviso-uscita'; avvisoUscita.setAttribute('role', 'status'); avvisoUscita.hidden = true;
+  avvisoUscita.textContent = 'Fai di nuovo «Indietro» per uscire';
+  app.append(avvisoUscita);
+  function armaUscita() {
+    uscitaArmata = true;
+    avvisoUscita.hidden = false; void avvisoUscita.offsetWidth; avvisoUscita.classList.add('visibile');
+    clearTimeout(timerUscita);
+    timerUscita = setTimeout(() => {
+      uscitaArmata = false; avvisoUscita.classList.remove('visibile');
+      setTimeout(() => { if (!uscitaArmata) avvisoUscita.hidden = true; }, 300);
+      aggiornaGuardia();
+    }, 2200);
+  }
+  // Chrome tiene conto solo delle voci di cronologia aggiunte dopo un tocco: la guardia si rimette al primo tocco utile
+  document.addEventListener('pointerdown', () => { if (!guardiaAttiva && !uscitaArmata) aggiornaGuardia(); }, true);
   function aggiornaGuardia() {
     const serve = serveGuardia();
     if (serve && !guardiaAttiva) { history.pushState({ sintonizzati: true }, ''); guardiaAttiva = true; }
@@ -5074,6 +5100,7 @@ Capriccio | Bisogno
       if (!sintonizzando && indietro) vai(indietro.dataset.vai);
     }
     else if (qui === 'schermata-fine') vai('schermata-modi');
+    else armaUscita();                                                // schermata iniziale o scelta della modalità
     aggiornaGuardia();
   });
   document.querySelectorAll('[data-vai]').forEach(b => b.addEventListener('click', () => { if (!sintonizzando) vai(b.dataset.vai); }));
