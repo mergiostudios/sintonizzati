@@ -3,7 +3,7 @@
    aggiornamento caricato su GitHub arriva subito; se manca la connessione si usa la copia salvata.
    Anche i caratteri (cartella fonti) vengono salvati all'installazione, così l'app ha sempre il suo aspetto.
    Se cambi le icone, i caratteri o il manifest, aumenta il numero di VERSIONE. */
-const VERSIONE = 'sintonizzati-v5';
+const VERSIONE = 'sintonizzati-v6';
 const FILE = [
   './',
   './index.html',
@@ -39,7 +39,8 @@ self.addEventListener('fetch', evento => {
   // La pagina del gioco: prima la rete, ma se la connessione è lenta (oltre 4 secondi)
   // si apre subito la copia salvata, così l'app non resta bloccata sulla schermata del logo
   if (richiesta.mode === 'navigate') {
-    const dallaRete = fetch(richiesta).then(risposta => {
+    // cache: 'no-cache' = chiede sempre a GitHub se la pagina è cambiata, senza usare copie vecchie del browser
+    const dallaRete = fetch(richiesta.url, { cache: 'no-cache', credentials: 'same-origin' }).then(risposta => {
       if (risposta.ok) {                           // si salva solo una pagina valida
         const copia = risposta.clone();
         caches.open(VERSIONE).then(cache => cache.put('./index.html', copia));
@@ -59,7 +60,7 @@ self.addEventListener('fetch', evento => {
   // Le carte: prima la rete (così le nuove carte arrivano subito), poi la copia salvata
   if (new URL(richiesta.url).pathname.endsWith('/carte.txt')) {
     evento.respondWith(
-      fetch(richiesta)
+      fetch(richiesta.url, { cache: 'no-cache', credentials: 'same-origin' })
         .then(risposta => {
           if (risposta.ok) { const copia = risposta.clone(); caches.open(VERSIONE).then(cache => cache.put('./carte.txt', copia)); }
           return risposta;
