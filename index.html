@@ -2243,6 +2243,37 @@
     .passo-disegno .pn { font-size: 10px; }
     .passo-testo { font-size: 11.5px; line-height: 1.2; }
   }
+  .passi-riepilogo.due { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .passo-disegno .pq { font: 400 13px "Michroma", Verdana, sans-serif; fill: var(--vetro-segni); opacity: .55; }
+  .passo-disegno .pg { animation: passo-segreto 4.5s ease-in-out calc(1s + var(--k) * .5s) infinite; }
+  @keyframes passo-segreto { 0%, 100% { transform: none; } 12% { transform: translateY(-3px); } 24% { transform: none; } }
+  .passo-disegno.pd-somma, .passo-disegno.pd-round { justify-items: center; align-content: center; gap: 4px; }
+  .passo-disegno .pc { display: flex; gap: 4px; }
+  .passo-disegno .pc b { font: 800 11px/1 "Bricolage Grotesque", system-ui, sans-serif; padding: 3px 6px; border-radius: 999px; background: var(--c); color: #10292F; animation: passo-chip 4s ease-in-out calc(1s + var(--k) * .3s) infinite; }
+  @keyframes passo-chip { 0%, 100% { transform: none; } 10% { transform: translateY(-3px); } 20% { transform: none; } }
+  .passo-disegno .pz { font-size: 10.5px; font-weight: 700; line-height: 1.15; text-align: center; padding: 2px 8px; border-radius: 999px; color: var(--su-tasto); background: color-mix(in srgb, var(--menta) 22%, transparent); }
+  .passo-disegno.pd-round .pz { background: color-mix(in srgb, var(--zona-oro) 22%, transparent); }
+  .passo-disegno .pr { display: grid; gap: 4px; justify-items: center; }
+  .passo-disegno .pgiro { display: flex; align-items: center; gap: 4px; }
+  .passo-disegno .pgiro small { font: 400 8.5px/1 "Michroma", Verdana, sans-serif; color: var(--su-tasto-tenue); margin-right: 2px; }
+  .passo-disegno .pgiro i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--c); animation: passo-turno 6s steps(1) calc(1.2s + var(--k) * .3s) infinite; }
+  .passo-disegno .pf { stroke: var(--ambra); stroke-width: 1.4; stroke-dasharray: 2 3; opacity: .8; animation: gd-flusso 1s linear infinite; }
+  .passo-disegno .pcuore { fill: var(--ambra); filter: drop-shadow(0 0 3px var(--ambra)); }
+  /* sotto i passi: l'invito a leggere tutte le regole, che apre il Come si gioca */
+  .invito-guida {
+    display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 8px; padding: 6px 10px 6px 6px; border: 0; border-radius: 10px; cursor: pointer; text-align: left;
+    font: 600 12px/1.2 "Bricolage Grotesque", system-ui, sans-serif; color: var(--su-tasto);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--ambra) 16%, transparent), transparent 85%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ambra) 35%, transparent);
+  }
+  .invito-guida b { color: var(--ambra-testo); font-weight: 800; }
+  :root[data-attivo="scuro"] .invito-guida b { color: var(--ambra); }
+  .invito-guida .ig-icona { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ambra); color: #2A1C00; }
+  .invito-guida .ig-icona svg { width: 16px; height: 16px; }
+  .invito-guida .ig-freccia { margin-left: auto; font-size: 18px; line-height: 1; color: var(--ambra-testo); transition: transform .2s; }
+  .invito-guida:hover .ig-freccia, .invito-guida:focus-visible .ig-freccia { transform: translateX(3px); }
+  .invito-guida:active { transform: translateY(1px); }
+  @media (max-height: 400px) { .invito-guida { margin-top: 5px; padding: 3px 8px 3px 4px; font-size: 11px; } .invito-guida .ig-icona { width: 18px; height: 18px; } .invito-guida .ig-icona svg { width: 13px; height: 13px; } }
   .nota-regole-complete[hidden] { display: none; }
   .nota-regole-complete { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; font-size: 12px; font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.25; }
   .nota-regole-complete svg { width: 14px; height: 14px; flex: none; color: var(--ambra-testo); }
@@ -3384,14 +3415,10 @@ Capriccio | Bisogno
         <div class="pannello">
           <div class="lcd"><h2>Tutti contro il gioco</h2><span class="lcd-destra"><span class="in-onda-riepilogo" aria-label="Stazione"></span><span class="strisce" aria-hidden="true"><i></i><i></i><i></i></span></span></div>
           <div class="info-collab">
-            <div class="scheda">
+            <div class="scheda con-passi">
               <h3>Come funziona</h3>
-              <ul class="regole">
-                <li><span class="segno icona-regola"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg></span><span>Sei round: il Conduttore cambia ogni volta e dà l’indizio. Fino a due cambi di radiocassette per round.</span></li>
-                <li class="regola-gruppo"><span class="segno icona-regola"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="16.5" cy="9" r="2.6"/><path d="M15.5 14.2A4.6 4.6 0 0 1 21 18.5"/></svg></span><span>Gli altri discutono e spostano la lancetta insieme: i punti di ogni round finiscono in un unico totale di gruppo.</span></li>
-                <li><span class="segno"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" style="fill:var(--vetro);stroke:var(--corpo);stroke-width:1.6"/><rect x="5" y="7" width="3" height="10" rx="1.5" style="fill:#1597BD"/><rect x="10.5" y="7" width="3" height="10" rx="1.5" style="fill:var(--segnale-alone)"/><rect x="16" y="7" width="3" height="10" rx="1.5" style="fill:#6FA300"/></svg></span><span>Con un 4 la radio si amplifica, con un 5 scegliete voi la ricezione. Il massimo all’ultimo round vale un round bonus!</span></li>
-              </ul>
-              <p class="nota-regole-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Regole complete in «Come si gioca», in alto.</p>
+              <div class="passi-riepilogo due" id="collab-passi"></div>
+              <button class="invito-guida" type="button" data-regole="collab"><span class="ig-icona"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg></span><span>Tutte le regole: <b>Come si gioca</b></span><span class="ig-freccia" aria-hidden="true">›</span></button>
             </div>
             <div class="scheda misuratore">
               <h3>Verifica della connessione in corso…</h3>
@@ -3423,6 +3450,7 @@ Capriccio | Bisogno
               <h3>Come funziona</h3>
               <ul class="regole" id="riepilogo-regole"></ul>
               <div class="passi-riepilogo" id="riepilogo-passi" hidden></div>
+              <button class="invito-guida" type="button" data-regole="auto"><span class="ig-icona"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.8"/><path d="M12 17.2h.01" stroke-width="3"/></svg></span><span>Tutte le regole: <b>Come si gioca</b></span><span class="ig-freccia" aria-hidden="true">›</span></button>
               <p class="nota-regole-complete" id="nota-regole-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Regole complete in «Come si gioca», in alto.</p>
             </div>
             <div class="scheda chi-gioca">
@@ -6023,6 +6051,11 @@ Capriccio | Bisogno
   const RIEPILOGHI = {
     singoli: {
       titolo: 'Ognuno per sé', chi: 'Chi gioca',
+      passi: [
+        { titolo: 'Indizio', disegno: 'segreto', testo: 'A turno uno dà l\u2019indizio, gli altri rispondono di nascosto.' },
+        { titolo: 'Punti', disegno: 'somma', testo: 'Da 0 a 5 punti a testa, chi dà l\u2019indizio prende la somma.' },
+        { titolo: 'Vittoria', disegno: 'giri', testo: 'Due indizi a testa: vince chi fa più punti.' }
+      ],
       regole: [
         ['indizio', 'A turno uno dà l\u2019indizio, gli altri spostano la lancetta di nascosto.'],
         ['punti', 'Da 0 a 5 punti a testa; chi dà l\u2019indizio prende la somma di tutti.'],
@@ -6059,12 +6092,42 @@ Capriccio | Bisogno
       [14, 24, 34, 44, 54, 64, 74, 84].map((x, k) => `<line class="pt" x1="${x}" y1="7" x2="${x}" y2="${k % 2 ? 11 : 13}"/>`).join('') +
       '<g class="pa"><line x1="40" y1="1" x2="40" y2="27"/></g>' +
       [38, 50, 62].map(x => `<circle class="pp" cx="${x}" cy="33" r="3.2"/><path class="pp" d="M${x - 5} 40a5 5 0 0 1 10 0z"/>`).join('') + '</svg>',
+    // giocatori singoli: la scala con le risposte segrete dei giocatori
+    segreto: () => '<svg viewBox="0 0 100 40" aria-hidden="true"><rect class="pv" x="4" y="3" width="92" height="22" rx="6"/>' +
+      [14, 24, 34, 44, 54, 64, 74, 84].map((x, k) => `<line class="pt" x1="${x}" y1="7" x2="${x}" y2="${k % 2 ? 11 : 13}"/>`).join('') +
+      '<text class="pq" x="50" y="19" text-anchor="middle">?</text>' +
+      [['var(--ambra)', 32], ['var(--corallo)', 50], ['var(--zona-2)', 68]].map(([c, x], k) => `<g class="pg" style="--k:${k}"><circle cx="${x}" cy="33" r="3.2" style="fill:${c}"/><path d="M${x - 5} 40a5 5 0 0 1 10 0z" style="fill:${c}"/></g>`).join('') + '</svg>',
+    somma: () => '<span class="pc">' + [['+4', 'var(--ambra)'], ['+2', 'var(--corallo)'], ['+5', 'var(--zona-2)']].map(([t, c], k) => `<b style="--c:${c};--k:${k}">${t}</b>`).join('') +
+      '</span><span class="pz">= 11</span>',
+    giri: () => '<span class="pr">' + [0, 1].map(g => `<span class="pgiro"><small>${g + 1}°</small>` + ['var(--menta)', 'var(--ambra)', 'var(--corallo)', 'var(--zona-2)'].map((c, k) => `<i style="--c:${c};--k:${g * 4 + k}"></i>`).join('') + '</span>').join('') + '</span>',
+    // collaborativa: quattro radioline unite e i sei round con il bonus
+    squadra: () => '<svg viewBox="0 0 100 40" aria-hidden="true">' + ['var(--ambra)', 'var(--corallo)', 'var(--menta)', 'var(--zona-2)'].map((c, k) => {
+      const x = 17 + k * 22;
+      return `<line class="pf" x1="${x}" y1="22" x2="50" y2="6"/><g class="pg" style="--k:${k}"><circle cx="${x}" cy="26" r="3.6" style="fill:${c}"/><path d="M${x - 6} 37a6 6 0 0 1 12 0z" style="fill:${c}"/></g>`;
+    }).join('') + '<circle class="pcuore" cx="50" cy="6" r="4"/></svg>',
+    round: () => '<span class="pr"><span class="pgiro">' + [0, 1, 2, 3, 4, 5, 6].map(k => `<i class="${k === 6 ? 'bonus' : ''}" style="--c:${k === 6 ? 'var(--zona-oro)' : 'var(--zona-2)'};--k:${k}"></i>`).join('') +
+      '</span></span><span class="pz">6 round + bonus</span>',
     scommesse: () => [['perfetto', '+2'], ['disturbato', '+1'], ['fuori', '+3']].map(([n, p], k) => `<span class="ps" style="--k:${k}"><span>${n}</span><b>${p}</b></span>`).join(''),
     turni: () => {
       const [a, b] = nomiSquadre();
       return `<span class="pn a">${a}</span><span class="pd">${[0, 1, 2, 3, 4, 5].map(k => `<i class="${k % 2 ? 'b' : 'a'}" style="--k:${k}"></i>`).join('')}</span><span class="pn b">${b}</span>`;
     }
   };
+  function disegnaPassi(contenitore, passi) {
+    contenitore.replaceChildren(...passi.map((ps, i) => {
+      const d = el('div', 'passo'), testa = el('div', 'passo-testa'), fig = el('div', 'passo-disegno pd-' + ps.disegno);
+      d.style.setProperty('--i', i);
+      testa.append(el('span', 'passo-n', i + 1), el('span', 'passo-titolo', ps.titolo));
+      fig.innerHTML = DISEGNI_PASSI[ps.disegno]();
+      d.append(testa, fig, el('p', 'passo-testo', ps.testo));
+      return d;
+    }));
+  }
+  // collaborativa: solo le cose essenziali, il resto è nel Come si gioca
+  disegnaPassi(document.getElementById('collab-passi'), [
+    { titolo: 'Insieme', disegno: 'squadra', testo: 'Il Conduttore dà l\u2019indizio, tutti insieme muovete la lancetta.' },
+    { titolo: 'Sei round', disegno: 'round', testo: 'Un solo totale: più siete in sintonia, più sale la connessione.' }
+  ]);
   function compilaRiepilogo() {
     const r = RIEPILOGHI[modoScelto] || RIEPILOGHI.singoli;
     const titolo = document.getElementById('riepilogo-titolo');
@@ -6074,14 +6137,7 @@ Capriccio | Bisogno
     elencoRegole.hidden = !!r.passi; passi.hidden = !r.passi;
     document.getElementById('nota-regole-complete').hidden = !!r.passi;
     elencoRegole.closest('.scheda').classList.toggle('con-passi', !!r.passi);
-    if (r.passi) passi.replaceChildren(...r.passi.map((ps, i) => {
-      const d = el('div', 'passo'), testa = el('div', 'passo-testa'), fig = el('div', 'passo-disegno pd-' + ps.disegno);
-      d.style.setProperty('--i', i);
-      testa.append(el('span', 'passo-n', i + 1), el('span', 'passo-titolo', ps.titolo));
-      fig.innerHTML = DISEGNI_PASSI[ps.disegno]();
-      d.append(testa, fig, el('p', 'passo-testo', ps.testo));
-      return d;
-    }));
+    if (r.passi) disegnaPassi(passi, r.passi);
     elencoRegole.replaceChildren(...r.regole.map(([icona, testo]) => {
       const li = el('li'), segno = el('span', 'segno icona-regola');
       segno.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONE_REGOLE[icona]}</svg>`;
