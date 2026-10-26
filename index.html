@@ -2191,6 +2191,59 @@
   }
   .in-onda-riepilogo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--colore-onda, var(--ambra)); box-shadow: 0 0 6px var(--colore-onda, var(--ambra)); }
   .riepilogo .lcd .lcd-destra { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+  /* riepilogo a passi (prova sulla modalità a squadre): tre riquadri in fila, uno per momento del turno */
+  .scheda.con-passi { display: flex; flex-direction: column; justify-content: center; }
+  .scheda.con-passi > h3 { display: none; }
+  .passi-riepilogo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, 1.6vw, 12px); gap: clamp(8px, 1.6cqw, 12px); }
+  .passi-riepilogo[hidden], .regole[hidden] { display: none; }
+  .passo {
+    position: relative; display: grid; grid-template-rows: auto 46px auto; align-content: start; gap: 6px; padding: 8px 8px 9px; border-radius: 12px;
+    background: color-mix(in srgb, var(--su-tasto) 6%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--su-tasto) 12%, transparent);
+    animation: passo-entra .45s ease-out calc(.15s + var(--i) * .15s) both;
+  }
+  /* una freccina tra un riquadro e l'altro: si legge in sequenza */
+  .passo:not(:last-child)::after {
+    content: ""; position: absolute; right: 0; top: 50%; width: 6px; height: 6px; z-index: 1; transform: translate(calc(50% + 4px), -50%) rotate(45deg);
+    border-top: 2px solid var(--ambra); border-right: 2px solid var(--ambra); opacity: .85;
+  }
+  @keyframes passo-entra { from { opacity: 0; transform: translateY(8px); } }
+  .passo-testa { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .passo-n { flex: none; display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%; background: var(--ambra); color: #2A1C00; font: 10px/1 "Michroma", Verdana, sans-serif; }
+  .passo-titolo { font: 10px/1.1 "Michroma", Verdana, sans-serif; letter-spacing: .04em; text-transform: uppercase; color: var(--su-tasto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .passo-disegno { display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; min-width: 0; }
+  .passo-disegno svg { width: 100%; max-width: 120px; height: 44px; overflow: visible; }
+  .passo-disegno .pv { fill: var(--vetro); stroke: var(--corpo); stroke-width: 2.5; }
+  .passo-disegno .pt { stroke: var(--vetro-segni); stroke-width: 1.2; opacity: .7; }
+  .passo-disegno .pa line { stroke: var(--lancetta); stroke-width: 2.6; stroke-linecap: round; }
+  .passo-disegno .pa { animation: passo-lancetta 3.6s ease-in-out 1s infinite; }
+  .passo-disegno .pp { fill: var(--ambra); }
+  @keyframes passo-lancetta { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(26px); } 55% { transform: translateX(12px); } 75% { transform: translateX(18px); } }
+  .passo-disegno.pd-scommesse { gap: 2px; align-content: center; place-items: stretch; }
+  .passo-disegno .ps { display: flex; justify-content: space-between; align-items: center; gap: 4px; padding: 1px 3px 1px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 700; line-height: 1.2;
+    background: color-mix(in srgb, var(--squadra-b) 16%, transparent); color: var(--su-tasto); animation: passo-scommessa 4.5s ease-in-out calc(1.2s + var(--k) * 1.5s) infinite; }
+  .passo-disegno .ps b { font: 800 10.5px/1 "Bricolage Grotesque", system-ui, sans-serif; padding: 1px 5px; border-radius: 999px; background: var(--squadra-b); color: #fff; }
+  @keyframes passo-scommessa { 0%, 34%, 100% { box-shadow: none; } 8%, 26% { box-shadow: inset 0 0 0 1.5px var(--squadra-b), 0 0 8px color-mix(in srgb, var(--squadra-b) 55%, transparent); } }
+  .passo-disegno.pd-turni { justify-items: center; gap: 3px; align-content: center; }
+  .passo-disegno .pn { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 800 11px/1.1 "Bricolage Grotesque", system-ui, sans-serif; }
+  .passo-disegno .pn.a { color: var(--ambra-testo); } .passo-disegno .pn.b { color: var(--squadra-b-testo); }
+  :root[data-attivo="scuro"] .passo-disegno .pn.a { color: var(--ambra); }
+  .passo-disegno .pd { display: flex; gap: 4px; }
+  .passo-disegno .pd i { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--c); --c: var(--ambra); animation: passo-turno 5s steps(1) calc(1.2s + var(--k) * .3s) infinite; }
+  .passo-disegno .pd i.b { --c: var(--squadra-b); }
+  @keyframes passo-turno { 0% { background: var(--c); } 70%, 100% { background: transparent; } }
+  .passo-testo { margin: 0; font-size: clamp(11.5px, 3.4vh, 13px); font-size: clamp(11.5px, 3.4cqh, 13px); line-height: 1.25; color: var(--su-tasto); }
+  @media (prefers-reduced-motion: reduce) { .passo, .passo-disegno .pa, .passo-disegno .ps, .passo-disegno .pd i { animation: none; } .passo-disegno .pd i { background: var(--c); } }
+  @media (max-height: 400px) {
+    #schermata-riepilogo .info-collab:has(.con-passi) { grid-template-columns: minmax(0, 1.6fr) minmax(0, .55fr); }
+    .passo { grid-template-rows: auto 34px auto; gap: 4px; padding: 6px 7px 7px; }
+    .passo-n { display: none; }
+    .passo-titolo { font-size: 9.5px; letter-spacing: .02em; }
+    .passo-disegno svg { height: 34px; }
+    .passo-disegno .ps { font-size: 10px; padding-block: 0; }
+    .passo-disegno .pn { font-size: 10px; }
+    .passo-testo { font-size: 11.5px; line-height: 1.2; }
+  }
+  .nota-regole-complete[hidden] { display: none; }
   .nota-regole-complete { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; font-size: 12px; font-weight: 600; color: var(--su-tasto-tenue); line-height: 1.25; }
   .nota-regole-complete svg { width: 14px; height: 14px; flex: none; color: var(--ambra-testo); }
   /* chi gioca: i nomi in ordine, con il loro numero; per le squadre i due walkie-talkie */
@@ -3369,7 +3422,8 @@ Capriccio | Bisogno
             <div class="scheda">
               <h3>Come funziona</h3>
               <ul class="regole" id="riepilogo-regole"></ul>
-              <p class="nota-regole-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Regole complete in «Come si gioca», in alto.</p>
+              <div class="passi-riepilogo" id="riepilogo-passi" hidden></div>
+              <p class="nota-regole-complete" id="nota-regole-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Regole complete in «Come si gioca», in alto.</p>
             </div>
             <div class="scheda chi-gioca">
               <h3 id="riepilogo-chi">Chi gioca</h3>
@@ -5977,6 +6031,12 @@ Capriccio | Bisogno
     },
     squadre: {
       titolo: 'Gruppo contro gruppo', chi: 'Le squadre',
+      // riepilogo a passi (prova): tre riquadri in sequenza con un piccolo disegno ciascuno
+      passi: [
+        { titolo: 'Indizio', disegno: 'lancetta', testo: 'Il caposquadra dà l\u2019indizio, la squadra muove la lancetta.' },
+        { titolo: 'Scommessa', disegno: 'scommesse', testo: 'Gli avversari puntano sulla distanza.' },
+        { titolo: 'Vittoria', disegno: 'turni', testo: 'Tre turni a testa, vince chi fa più punti. Pari? Spareggio!' }
+      ],
       regole: [
         ['indizio', 'Tre turni a testa: il caposquadra dà l\u2019indizio, la squadra sposta la lancetta.'],
         ['dado', 'Gli avversari scommettono: perfetto +2, disturbato +1, fuori frequenza +3.'],
@@ -5993,12 +6053,36 @@ Capriccio | Bisogno
       x.style.setProperty('--colore-onda', zapping ? 'var(--ambra)' : (tasto ? tasto.style.getPropertyValue('--colore') : 'var(--ambra)'));
     });
   }
+  // i disegnini dei passi del riepilogo
+  const DISEGNI_PASSI = {
+    lancetta: () => '<svg viewBox="0 0 100 40" aria-hidden="true"><rect class="pv" x="4" y="3" width="92" height="22" rx="6"/>' +
+      [14, 24, 34, 44, 54, 64, 74, 84].map((x, k) => `<line class="pt" x1="${x}" y1="7" x2="${x}" y2="${k % 2 ? 11 : 13}"/>`).join('') +
+      '<g class="pa"><line x1="40" y1="1" x2="40" y2="27"/></g>' +
+      [38, 50, 62].map(x => `<circle class="pp" cx="${x}" cy="33" r="3.2"/><path class="pp" d="M${x - 5} 40a5 5 0 0 1 10 0z"/>`).join('') + '</svg>',
+    scommesse: () => [['perfetto', '+2'], ['disturbato', '+1'], ['fuori', '+3']].map(([n, p], k) => `<span class="ps" style="--k:${k}"><span>${n}</span><b>${p}</b></span>`).join(''),
+    turni: () => {
+      const [a, b] = nomiSquadre();
+      return `<span class="pn a">${a}</span><span class="pd">${[0, 1, 2, 3, 4, 5].map(k => `<i class="${k % 2 ? 'b' : 'a'}" style="--k:${k}"></i>`).join('')}</span><span class="pn b">${b}</span>`;
+    }
+  };
   function compilaRiepilogo() {
     const r = RIEPILOGHI[modoScelto] || RIEPILOGHI.singoli;
     const titolo = document.getElementById('riepilogo-titolo');
     titolo.dataset.titolo = titolo.textContent = r.titolo;
     document.getElementById('regole-riepilogo').dataset.regole = modoScelto;
-    document.getElementById('riepilogo-regole').replaceChildren(...r.regole.map(([icona, testo]) => {
+    const elencoRegole = document.getElementById('riepilogo-regole'), passi = document.getElementById('riepilogo-passi');
+    elencoRegole.hidden = !!r.passi; passi.hidden = !r.passi;
+    document.getElementById('nota-regole-complete').hidden = !!r.passi;
+    elencoRegole.closest('.scheda').classList.toggle('con-passi', !!r.passi);
+    if (r.passi) passi.replaceChildren(...r.passi.map((ps, i) => {
+      const d = el('div', 'passo'), testa = el('div', 'passo-testa'), fig = el('div', 'passo-disegno pd-' + ps.disegno);
+      d.style.setProperty('--i', i);
+      testa.append(el('span', 'passo-n', i + 1), el('span', 'passo-titolo', ps.titolo));
+      fig.innerHTML = DISEGNI_PASSI[ps.disegno]();
+      d.append(testa, fig, el('p', 'passo-testo', ps.testo));
+      return d;
+    }));
+    elencoRegole.replaceChildren(...r.regole.map(([icona, testo]) => {
       const li = el('li'), segno = el('span', 'segno icona-regola');
       segno.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONE_REGOLE[icona]}</svg>`;
       li.append(segno, el('span', '', testo));
