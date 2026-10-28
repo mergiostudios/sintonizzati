@@ -3676,7 +3676,7 @@ Capriccio | Bisogno
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.26</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.28</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -6431,7 +6431,8 @@ Capriccio | Bisogno
     if (partita && partita.modo === 'squadre' && partita.fase === 'scommessa') {
       // toccando la scala si sceglie la scommessa della zona toccata, rispetto alla lancetta
       const d = Math.abs(valoreDaX(q.x) - partita.sintonia);
-      if (q.y < 192) scegliScommessa(d <= 2 ? 'perfetto' : d <= 7 ? 'disturbato' : 'fuori');
+      // le stesse soglie dei tre tasti (e delle zone disegnate sulla scala): 2,5% e 9%
+      if (q.y < 192) scegliScommessa(SCOMMESSE.find(x => x.vinta(d)).id);
       return;
     }
     if (!lancettaLibera() || q.y > 194) return;         // si tocca solo la finestra della scala
