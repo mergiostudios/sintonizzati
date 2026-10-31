@@ -2314,6 +2314,15 @@
     .riepilogo .nota-chi { display: none; }
     .riepilogo .scheda h3 { margin-bottom: 3px; }
   }
+  /* chi gioca: posti a pillola, con il numero ambra nell'ordine di gioco */
+  .elenco-nomi.giro { gap: 5px; }
+  .elenco-nomi.giro li { gap: 8px; padding: 3px 10px 3px 3px; border-radius: 999px; line-height: 1.2; font-size: clamp(13px, 3.8cqh, 16px);
+    background: color-mix(in srgb, var(--su-tasto) 7%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--su-tasto) 12%, transparent); }
+  .elenco-nomi.giro .num { flex: none; width: 20px; height: 20px; background: var(--ambra); color: #2A1C00; }
+  @media (max-height: 400px) {
+    .elenco-nomi.giro li { gap: 6px; padding: 2px 8px 2px 2px; font-size: 13px; }
+    .elenco-nomi.giro .num { width: 17px; height: 17px; font-size: 8.5px; }
+  }
   .segno.icona-regola svg { width: 19px; height: 19px; }
   /* Riepilogo: il riquadro di destra (chi gioca / le squadre) ha una larghezza massima,
      così "Come funziona" ha più spazio e il tasto Gioca resta sempre visibile */
@@ -6145,7 +6154,7 @@ Capriccio | Bisogno
       sfida.append(squadra(a, 'a'), el('span', 'vs-riepilogo', 'VS'), squadra(b, 'b'));
       box.replaceChildren(sfida);
     } else {
-      const ol = el('ol', 'elenco-nomi');
+      const ol = el('ol', 'elenco-nomi giro');
       verificaSingoli(true).forEach((nome, i) => { const li = el('li'); li.append(el('i', 'num', i + 1), el('span', '', nome)); ol.append(li); });
       box.replaceChildren(ol);
     }
