@@ -3681,7 +3681,7 @@ Capriccio | Bisogno
       <div class="scheda interruttori">
         <div class="riga-imp">
           <span class="ico-imp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></span>
-          <span class="testo-imp"><span id="imp-audio-titolo">Audio</span></span>
+          <span class="testo-imp"><span id="imp-audio-titolo">Effetti sonori</span></span>
           <button class="interruttore" role="switch" aria-checked="true" data-imp="audio" aria-labelledby="imp-audio-titolo"><span class="cursore"></span></button>
         </div>
         <div class="riga-imp">
@@ -3700,7 +3700,7 @@ Capriccio | Bisogno
           <button class="interruttore" role="switch" aria-checked="false" data-imp="daltonico" aria-labelledby="imp-daltonico-titolo"><span class="cursore"></span></button>
         </div>
       </div>
-      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.10.31</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
+      <div class="dialogo-azioni"><p class="credito-imp">© 2026 Mergio Studios<!-- la data dell'ultimo aggiornamento: si cambia a ogni nuova versione caricata su GitHub --><span class="versione-app">Versione 2026.11.02</span></p><button class="tastino" id="chiudi-impostazioni">Fatto</button></div>
     </div>
   </div>
 
@@ -3900,6 +3900,7 @@ Capriccio | Bisogno
     impostazioni[chiave] = acceso;
     try { localStorage.setItem('sintonizzati-impostazioni', JSON.stringify(impostazioni)); } catch (e) {}
     if (chiave === 'audio' && acceso) Suoni.volume(true);
+    if (acceso && (chiave === 'audio' || chiave === 'musica')) Suoni.sblocca();
     if (chiave !== 'audio' || acceso) suona('interruttore', { acceso });
     if (chiave === 'vibrazione' && acceso) vibra('prova');
     if (chiave === 'daltonico') applicaDaltonico();
@@ -3914,10 +3915,10 @@ Capriccio | Bisogno
      Il timbro è quello di una radio anni '80: scatti di tasti meccanici,
      fruscio, fischi di sintonia, campanelli FM da sintetizzatore,
      piccoli jingle da stazione radio e fanfare con ottoni sintetici.
-     Tutti i suoni passano da qui e rispettano l'interruttore "Audio".
+     Tutti i suoni passano da qui: gli effetti rispettano l'interruttore "Effetti sonori", la musica quello "Musica".
      ===================================================================== */
   const Suoni = (() => {
-    let ctx = null, master = null, radio = null, rumoreBuf = null, ultimaTacca = -1;
+    let ctx = null, master = null, musicaOut = null, radio = null, rumoreBuf = null, ultimaTacca = -1;
     const VOLUME = 0.85;
     const NOTA = n => 440 * Math.pow(2, (n - 69) / 12);       // da numero MIDI a Hz
 
@@ -3933,6 +3934,8 @@ Capriccio | Bisogno
       master = ctx.createGain();
       master.gain.value = impostazioni.audio ? VOLUME : 0;
       master.connect(comp); comp.connect(ctx.destination);
+      // la musica ha un'uscita sua: si sente anche con gli effetti sonori spenti (ha un interruttore a parte)
+      musicaOut = ctx.createGain(); musicaOut.gain.value = VOLUME; musicaOut.connect(comp);
       // "altoparlante" della radio: banda stretta con un po' di presenza sui medi
       const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 200;
       const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5000;
@@ -4716,7 +4719,7 @@ Capriccio | Bisogno
       const bus = ctx.createGain();
       bus.gain.setValueAtTime(0.0001, T);
       bus.gain.setTargetAtTime(livelloBase, inizio - 0.05, cercando ? 0.22 : 0.35);
-      bus.connect(filtroBasso); filtroBasso.connect(filtroAlto); filtroAlto.connect(master);
+      bus.connect(filtroBasso); filtroBasso.connect(filtroAlto); filtroAlto.connect(musicaOut);
       musica = { id, bus, uscita: filtroAlto, brano: BRANI[id], passo: 0, prossimo: inizio, inizio };
       musica.timer = setInterval(programma, 50);
       programma();
@@ -4822,7 +4825,7 @@ Capriccio | Bisogno
 
   // Il browser permette l'audio solo dopo un gesto: lo sblocchiamo al primo tocco
   ['pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(ev =>
-    document.addEventListener(ev, () => { if (impostazioni.audio) Suoni.sblocca(); }, { capture: true, passive: true }));
+    document.addEventListener(ev, () => { if (impostazioni.audio || impostazioni.musica) Suoni.sblocca(); }, { capture: true, passive: true }));
   document.addEventListener('visibilitychange', () => Suoni.pausa(document.hidden));
 
   // Scatto meccanico per i tasti comuni (gli altri hanno un suono proprio)
@@ -5025,7 +5028,7 @@ Capriccio | Bisogno
     if (qui === 'schermata-modi' && radioMenuInAttesa) return;     // la radio sta per cercare una stazione
     const id = qui === 'schermata-modi' || (!stazioneDecisa && SCHERMATE_NOMI.includes(qui)) ? stazioneMenu
       : qui === 'schermata-gioco' && partita && partita.zap ? partita.zap.stazione : inAscoltoStazioni();
-    if (impostazioni.audio && impostazioni.musica && id && SCHERMATE_MUSICA.includes(qui)) Suoni.musica(id);
+    if (impostazioni.musica && id && SCHERMATE_MUSICA.includes(qui)) Suoni.musica(id);
     else Suoni.fermaMusica();
   }
 
